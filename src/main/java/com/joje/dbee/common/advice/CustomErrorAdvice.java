@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.google.gson.Gson;
+import com.joje.dbee.common.contents.StatusCode;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,9 +23,8 @@ public class CustomErrorAdvice {
 	public ResponseEntity<?> customErrorException(RuntimeException e){
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("status", "faild");
-		resultMap.put("errorCode", "500");
-		resultMap.put("errorMessage", "서버 에러");
+		resultMap.put("errorCode", StatusCode.INTERNAL_SERVER_ERROR.getCode());
+		resultMap.put("errorMessage", StatusCode.INTERNAL_SERVER_ERROR.getMessage());
 		
 		log.info("[ERROR:500]=[{}]", resultMap);
 		log.error(e.getMessage());

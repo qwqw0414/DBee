@@ -7,6 +7,8 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.joje.dbee.common.contents.StatusCode;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,23 +23,18 @@ public class CustomErrorController implements ErrorController {
 	@GetMapping(value = "/error")
 	public String error(HttpServletRequest request) {
 		String status = String.valueOf(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE));
-		String errorStatus = "";
 		String errorMessage = "";
 		
 		if ("404".equals(status)) {
-			errorStatus = "Page Not Found";
-			errorMessage = "페이지를 찾을 수 없습니다.";
+			errorMessage = StatusCode.NOT_FOUND.getMessage();
 		} else if ("403".equals(status)) {
-			errorStatus = "Forbidden";
-			errorMessage = "해당 페이지에 권한이 없습니다.";
+			errorMessage = StatusCode.FORBIDDEN.getMessage();
 		} else if ("500".equals(status)) {
-			errorStatus = "Server Error";
-			errorMessage = "서버 에러........... ??";
+			errorMessage = StatusCode.INTERNAL_SERVER_ERROR.getMessage();
 		}
 		
 //		requset data set
 		request.setAttribute("errorCode", status);
-		request.setAttribute("errorStatus", errorStatus);
 		request.setAttribute("errorMessage", errorMessage);
 		
 		log.info("ErrorController [status]=[{}]", status);
