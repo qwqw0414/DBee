@@ -1,23 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="layout/blank-layout">
 
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>DBee</title>
-    <!-- 헤더 -->
-	<th:block th:replace="fragments/head.html :: head"></th:block>
+<style layout:fragment="style">
+</style>
 
-</head>
+<div layout:fragment="content" class="container-fluid">
+</div>
 
-<body id="page-top" class="bg-dark">
-
-    <h1 class="text-center text-primary">^^</h1>
-    <button class="btn btn-outline-danger btn-block">@</button>
-
-    <th:block th:replace="fragments/footer.html :: footer"></th:block>
-</body>
+<script layout:fragment="script" th:inline="javascript">
+</script>
 
 </html>

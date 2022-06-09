@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>DBee</title>
+
+    <!-- 헤더 -->
+    <th:block th:replace="fragments/head.html :: head"></th:block>
+
+    <!-- CSS -->
+    <style layout:fragment="style"></style>
+</head>
+
+<body id="page-top" class="bg-light">
+
+    <div id="wrapper">
+
+        <!-- 높이 유지 -->
+        <ul class="navbar-nav sidebar" style="width: 0px !important;"></ul>
+
+        <!-- Contents -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <th:block th:replace="fragments/header.html :: header"></th:block>
+                <div layout:fragment="content"></div>
+            </div>
+            <th:block th:replace="fragments/footer.html :: footer"></th:block>
+        </div>
+    </div>
+
+    <!-- JAVA SCRIPT -->
+	<script layout:fragment="script"></script>
+</body>
+
+</html>

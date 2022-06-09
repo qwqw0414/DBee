@@ -1,12 +1,32 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DBee</title>
-</head>
-<body>
-    <h1>에러 에러 ~</h1>
-</body>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="layout/blank-layout">
+
+<!-- CSS -->
+<style layout:fragment="style">
+</style>
+
+<!-- HTML -->
+<div layout:fragment="content" class="h-100">
+    <table class="h-100 w-100">
+        <tbody>
+            <tr>
+                <td class="align-middle">
+                    <div class="text-center">
+                        <div class="error mx-auto mb-5" th:data-text="${errorCode}" th:text="${errorCode}"></div>
+                        <p class="text-dark mb-2" th:text="${errorMessage}"></p>
+                        <a th:href="@{/}">Back to Home</a>
+                    </div>
+                </td>
+             </tr>
+         </tbody>
+    </table>
+</div>
+
+<!-- JavaScript -->
+<script layout:fragment="script" th:inline="javascript">
+</script>
+
 </html>

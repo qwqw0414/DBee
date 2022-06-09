@@ -1,10 +1,78 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
-<!-- Footer -->
-<footer th:fragment="header" class="sticky-footer">
+<th:block th:fragment="header">
+    <nav class="navbar navbar-expand topbar mb-0 fixed-top">
 
-    
-</footer>
-<!-- End of Footer -->
+        <!-- Topbar Navbar -->
+        <ul class="navbar-nav ml-auto">
+
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <!-- <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span> -->
+                    <img class="img-profile rounded-circle" th:src="@{/assets/img/common/undraw_profile.svg}">
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" style="top: 60px" aria-labelledby="userDropdown">
+
+                    <h6 sec:authorize-expr="isAuthenticated()" class="dropdown-header text-center bg-primary text-light"
+                        sec:authentication="name"></h6>
+
+                    <a class="dropdown-item" th:href="@{/}">
+                        <i class="fas fa-home fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Home
+                    </a>
+
+                    <div class="dropdown-divider"></div>
+
+                    <!-- 로그인한 경우 -->
+                    <div sec:authorize-expr="isAuthenticated()">
+                        <div sec:authorize="hasRole('ADMIN')">
+                            <!-- 관리자 메뉴 -->
+                            <a class="dropdown-item" th:href="@{/admin}">
+                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Admin Page
+                            </a>
+                            <div class="dropdown-divider"></div>
+                        </div>
+
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Profile
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Settings
+                        </a>
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Activity Log
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logout-modal">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Logout
+                        </a>
+                    </div>
+
+                    <!-- 로그인 하지 않은 경우 -->
+                    <div sec:authorize-expr="!isAuthenticated()">
+                        <a class="dropdown-item" th:href="@{/login}">
+                            <i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            LogIn
+                        </a>
+                        <a class="dropdown-item" th:href="@{/signup}">
+                            <i class="fas fa-users fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Register
+                        </a>
+                    </div>
+                </div>
+                <!-- Dropdown - User Information -->
+            </li>
+        </ul>
+    </nav>
+
+</th:block>
 
 </html>
