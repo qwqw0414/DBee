@@ -50,7 +50,7 @@ mybatis:
 logging:
   level:
     root: error
-    com.joje.dive: debug
+    com.joje.dbee: debug
 
 ---
 # Local
