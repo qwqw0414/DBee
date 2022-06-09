@@ -1,0 +1,90 @@
+# DBee - application.yml
+
+server:
+# Server Port
+  port: 9090
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+  profiles:
+    active: local
+    
+# Devtools
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  freemarker:
+    cache: false
+    
+# Thymeleaf
+  thymeleaf:
+    enabled: true
+    cache: false  # 운영시 true
+    encoding: UTF-8
+    
+# JPA
+  jpa:
+    hibernate:
+      ddl-auto: none
+      
+# File
+  servlet:
+    multipart:
+      file-size-threshold: 1MB
+      location: ./upload
+      max-file-size: 100MB
+      max-request-size: 100MB
+      
+# Mybatis
+mybatis:
+  type-aliases-package: com.joje.dive.**.vo
+  mapper-locations: mappers/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+# Logging
+logging:
+  level:
+    root: error
+    com.joje.dive: debug
+
+---
+# Local
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mariadb://localhost:4406/dbee?characterEncoding=UTF-8&serverTimezone=UTC
+    username: ENC(0/cMqN7QTjW4EQuz4sraGg==)
+    password: ENC(n9rDws6yHK8quZHqh6O2K3O/YjkiKP5z)
+
+---
+# Dev
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mariadb://localhost:4406/dbee?characterEncoding=UTF-8&serverTimezone=UTC
+    username: ENC(0/cMqN7QTjW4EQuz4sraGg==)
+    password: ENC(n9rDws6yHK8quZHqh6O2K3O/YjkiKP5z)
+    
+---
+# Prod
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mariadb://localhost:4406/dbee?characterEncoding=UTF-8&serverTimezone=UTC
+    username: ENC(0/cMqN7QTjW4EQuz4sraGg==)
+    password: ENC(n9rDws6yHK8quZHqh6O2K3O/YjkiKP5z)
+    
