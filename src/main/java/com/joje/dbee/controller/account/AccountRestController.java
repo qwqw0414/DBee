@@ -14,7 +14,7 @@ import com.joje.dbee.service.account.UserService;
 import com.joje.dbee.vo.common.ResultVo;
 
 @RestController
-@RequestMapping(value = "/account")
+@RequestMapping(value = "/dbee/account")
 public class AccountRestController {
 
 	@Autowired

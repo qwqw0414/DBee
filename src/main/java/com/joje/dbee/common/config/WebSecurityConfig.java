@@ -58,13 +58,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().permitAll()
 				.and()
 			.formLogin()
-				.loginPage("/login")
-				.defaultSuccessUrl("/")
+				.loginPage("/dbee/account/login")
+				.defaultSuccessUrl("/dbee")
 				.permitAll()
 				.and()
 			.logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/login")
+				.logoutRequestMatcher(new AntPathRequestMatcher("/dbee/account/logout"))
+				.logoutSuccessUrl("/dbee/account/login")
 				.permitAll();
 //				.and()
 //			.csrf().disable();

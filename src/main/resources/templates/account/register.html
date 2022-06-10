@@ -27,7 +27,7 @@
                         </div>
 
                         <!-- 회원가입 폼 -->
-                        <form class="user" id="registerForm" th:action="@{/signup}" method="post">
+                        <form class="user" id="registerForm" th:action="@{/dbee/account/signup}" method="post">
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-user" id="userId" placeholder="아이디"
                                     name="userId">
@@ -55,7 +55,7 @@
                             <a class="small" href="forgot-password.html">Forgot Password?</a>
                         </div>
                         <div class="text-center">
-                            <a class="small" th:href="@{/login}">Already have an account? Login!</a>
+                            <a class="small" th:href="@{/dbee/account/login}">Already have an account? Login!</a>
                         </div>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
             }
 
             $.ajax({
-                url: "/account/duple/" + userId,
+                url: "/dbee/account/duple/" + userId,
                 type: "GET",
                 dataType: "JSON",
                 success: (data) => {
