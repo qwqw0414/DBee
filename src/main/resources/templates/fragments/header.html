@@ -1,8 +1,14 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
-<th:block th:fragment="header">
-    <nav class="navbar navbar-expand topbar mb-0 fixed-top">
+<header th:fragment="header">
+    <style>
+        header a.nav-link img:hover {
+            -webkit-animation: vibrate-1 0.3s linear infinite both;
+            animation: vibrate-1 0.3s linear infinite both;
+        }
+    </style>
 
+    <nav class="navbar navbar-expand topbar mb-0 fixed-top">
         <!-- Topbar Navbar -->
         <ul class="navbar-nav ml-auto">
 
@@ -11,7 +17,8 @@
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <!-- <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span> -->
-                    <img class="img-profile rounded-circle" th:src="@{/assets/img/common/undraw_profile.svg}">
+                    <!-- <img class="img-profile rounded-circle" th:src="@{/assets/img/common/undraw_profile.svg}"> -->
+                    <img class="img-profile rounded-circle vibrate-1" th:src="@{/assets/img/common/bee.png}">
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" style="top: 60px" aria-labelledby="userDropdown">
@@ -73,6 +80,6 @@
         </ul>
     </nav>
 
-</th:block>
+</header>
 
 </html>

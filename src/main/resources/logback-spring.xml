@@ -6,7 +6,7 @@
 	<springProperty scope="context" name="LOG_LEVEL" source="logging.level.root" />
 	
 	<!-- log file path -->
-	<property name="LOG_PATH" value="/Dev/logs/DBee" />
+	<property name="LOG_PATH" value="/Dev/Logs/DBee" />
 	<!-- log file name -->
 	<property name="LOG_FILE_NAME" value="log" />
 	<!-- err log file name -->

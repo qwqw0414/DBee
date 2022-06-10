@@ -1,4 +1,4 @@
-package com.joje.dbee.common.filter;
+package com.joje.dbee.common.utils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

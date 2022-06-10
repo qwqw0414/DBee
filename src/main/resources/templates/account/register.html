@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="layout/center-layout">
+
+<style layout:fragment="style">
+</style>
+
+<div layout:fragment="content" class="container">
+
+    <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+                <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+
+                <div class="col-lg-7">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                        </div>
+
+                        <!-- 알림 -->
+                        <div id="alertArea">
+                            <div class="alert alert-danger" style="display: none;" role="alert"></div>
+                        </div>
+
+                        <!-- 회원가입 폼 -->
+                        <form class="user" id="registerForm" th:action="@{/signup}" method="post">
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-user" id="userId" placeholder="아이디"
+                                    name="userId">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-user" id="userName" placeholder="이름"
+                                    name="userName">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control form-control-user" id="password"
+                                    placeholder="비밀번호" name="password">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control form-control-user" id="password_chk"
+                                    placeholder="비밀번호 확인">
+                            </div>
+                            <a class="btn btn-primary btn-user btn-block text-light" id="registerBtn">
+                                Register Account
+                            </a>
+                        </form>
+                        <!-- // 회원가입 폼 -->
+
+                        <hr>
+                        <div class="text-center">
+                            <a class="small" href="forgot-password.html">Forgot Password?</a>
+                        </div>
+                        <div class="text-center">
+                            <a class="small" th:href="@{/login}">Already have an account? Login!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+    $(() => {
+        const $alert = $("#alertArea div.alert");
+
+
+        const oExpTable = {
+            "userId": /^[a-z]+[a-z0-9]{5,19}$/,    //6 ~ 20 영문 시작 숫자 포함
+            "userName": /^[a-z가-힣]{2,8}$/,       //2 ~ 8 한글만
+            "password": /^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$/ //영 대소문자 특문 숫자 포함
+        }
+
+
+        // 공통 함수
+        function fn_reg(key, value) {
+            var result = oExpTable[key].test(value);
+            console.log("fn_reg", key, result, oExpTable[key]);
+            return result;
+        }
+
+
+        // 이벤트 핸들링
+        $("#registerBtn").on("click", fn_submit);
+        $("#userId").on("focusout", fn_duplicateCheck);
+
+
+        function fn_duplicateCheck() {
+            var userId = $("#userId").val();
+
+            if (userId === undefined || userId.length <= 4) {
+                return false;
+            }
+
+            $.ajax({
+                url: "/account/duple/" + userId,
+                type: "GET",
+                dataType: "JSON",
+                success: (data) => {
+                    var idCount = data.data.countId;
+
+                    if (idCount > 0) {
+                        $("#userId").focus();
+                        $alert.show();
+                        $alert.text("중복된 아이디입니다.");
+                    }
+                    else {
+                        $alert.hide();
+                    }
+                },
+                complete: () => {
+
+                },
+                error: (e, x, c) => {
+                    console.log(e, x, c);
+                }
+
+            });
+        }
+
+
+        function fn_submit() {
+            var $userId = $("#userId");
+            var $userName = $("#userName");
+            var $password = $("#password");
+            var $password_chk = $("#password_chk");
+
+            if (!fn_reg("userId", $userId.val())) {
+                $alert.show();
+                $alert.text("아이디를 입력해주세요.");
+                $userId.focus();
+                return false;
+            }
+
+            if (!fn_reg("userName", $userName.val())) {
+                $alert.show();
+                $alert.text("이름을 입력해주세요.");
+                $userName.focus();
+                return false;
+            }
+
+            // if(!fn_reg("password", $password.val())){
+            //     $alert.show();
+            //     $alert.text("비밀번호를 입력해주세요.");
+            //     $password.focus();
+            //     return false;
+            // }
+
+            // if($password.val() === $password_chk.val()){
+            //     $alert.show();
+            //     $alert.text("비밀번호가 서로 일치하지 않습니다.");
+            //     $password.focus();
+            //     return false;
+            // }
+
+            $("#registerForm").submit();
+        }
+    });
+
+</script>
+
+</html>
