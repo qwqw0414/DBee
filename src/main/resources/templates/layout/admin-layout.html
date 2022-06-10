@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>DBee</title>
+
+    <!-- 헤더 -->
+    <th:block th:replace="fragments/head.html :: head"></th:block>
+
+    <!-- CSS -->
+    <style layout:fragment="style"></style>
+</head>
+
+<body id="page-top" class="bg-light">
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/dbee/admin}">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-solid fa-eye"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">Admin Page</div>
+            </a>
+            
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/dbee/admin}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Account
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/dbee/admin/account}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Account Management</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                HOME
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/dbee/admin/home}">
+                    <i class="fas fa-fw fa-home"></i>
+                    <span>Home Manager</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Contents -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content" style="margin-top: 80px;">
+                <th:block th:replace="fragments/header.html :: header"></th:block>
+                <div layout:fragment="content"></div>
+            </div>
+            <th:block th:replace="fragments/footer.html :: footer"></th:block>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Modal Wrapper -->
+    <div id="modal-wrapper">
+        <th:block th:replace="fragments/modal.html :: modal"></th:block>
+        <block layout:fragment="modal"></block>
+    </div>
+
+    <!-- Script Source -->
+    <th:block th:replace="fragments/source.html :: source"></th:block>
+
+    <!-- JavaScript -->
+	<script layout:fragment="script"></script>
+</body>
+
+</html>

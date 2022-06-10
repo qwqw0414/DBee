@@ -15,10 +15,12 @@ import lombok.EqualsAndHashCode;
 public class ResultVo {
 
 	private StatusCode status;
+	private int code;
 	private Map<String, Object> data;
 	
 	public ResultVo() {
 		this.status = StatusCode.SUCCESS;
+		this.code = StatusCode.SUCCESS.getCode();
 		this.data = new HashMap<>();
 	}
 	

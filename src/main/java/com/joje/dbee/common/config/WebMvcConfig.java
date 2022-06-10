@@ -20,14 +20,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	/**
 	 * 인터셉터 핸들링
 	 */
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		
-		registry.addInterceptor(new CommonInterceptor()).addPathPatterns("/**")
-														.excludePathPatterns(EXCLUDE_PATHS);
-		
-		WebMvcConfigurer.super.addInterceptors(registry);
-	}
+//	@Override
+//	public void addInterceptors(InterceptorRegistry registry) {
+//		registry.addInterceptor(new CommonInterceptor()).addPathPatterns("/**")
+//														.excludePathPatterns(EXCLUDE_PATHS);
+//		WebMvcConfigurer.super.addInterceptors(registry);
+//	}
 
 	//	ViewResolver 설정
 	@Bean

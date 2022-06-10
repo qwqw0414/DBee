@@ -19,7 +19,7 @@ import com.joje.dbee.common.utils.ReadableRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@WebFilter(urlPatterns = { "/signup" })
+@WebFilter(urlPatterns = { "/dbee/account/signup", "/dbee/admin/account/update" })
 public class AccountFilter implements Filter{
 //	아이디 정규식 : 영문 숫자 6이상 20이하
 	private static final String REG_USER_ID = "^[a-z]+[a-z0-9]{5,19}$";
