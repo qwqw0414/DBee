@@ -1,4 +1,4 @@
-package com.joje.dbee.dao.user;
+package com.joje.dbee.dao;
 
 import java.util.List;
 import java.util.Map;

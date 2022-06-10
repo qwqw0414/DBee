@@ -1,4 +1,4 @@
-package com.joje.dbee.controller.account;
+package com.joje.dbee.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.joje.dbee.common.contents.StatusCode;
-import com.joje.dbee.service.account.UserService;
+import com.joje.dbee.service.UserService;
 import com.joje.dbee.vo.common.ResultVo;
 
 @RestController

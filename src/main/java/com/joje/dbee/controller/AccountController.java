@@ -1,4 +1,4 @@
-package com.joje.dbee.controller.account;
+package com.joje.dbee.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.joje.dbee.entity.account.UserEntity;
-import com.joje.dbee.service.account.UserService;
+import com.joje.dbee.service.UserService;
 
 @Controller
 @RequestMapping(value = "/dbee/account")

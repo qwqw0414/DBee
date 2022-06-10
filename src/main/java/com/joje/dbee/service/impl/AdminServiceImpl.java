@@ -1,4 +1,4 @@
-package com.joje.dbee.service.admin;
+package com.joje.dbee.service.impl;
 
 import java.util.List;
 import java.util.Map;
@@ -8,10 +8,11 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.joje.dbee.dao.user.UserDao;
+import com.joje.dbee.dao.UserDao;
 import com.joje.dbee.entity.account.UserEntity;
-import com.joje.dbee.repository.account.RoleRepository;
-import com.joje.dbee.repository.account.UserRepository;
+import com.joje.dbee.repository.RoleRepository;
+import com.joje.dbee.repository.UserRepository;
+import com.joje.dbee.service.AdminService;
 
 import lombok.extern.slf4j.Slf4j;
 

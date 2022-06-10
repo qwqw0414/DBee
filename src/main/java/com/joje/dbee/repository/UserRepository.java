@@ -1,4 +1,4 @@
-package com.joje.dbee.repository.account;
+package com.joje.dbee.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

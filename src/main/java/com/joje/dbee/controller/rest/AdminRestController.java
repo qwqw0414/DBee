@@ -1,4 +1,4 @@
-package com.joje.dbee.controller.admin;
+package com.joje.dbee.controller.rest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.joje.dbee.common.contents.StatusCode;
-import com.joje.dbee.service.admin.AdminService;
+import com.joje.dbee.service.AdminService;
 import com.joje.dbee.vo.common.PaginationVo;
 import com.joje.dbee.vo.common.ResultVo;
 

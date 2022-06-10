@@ -1,4 +1,4 @@
-package com.joje.dbee.repository.account;
+package com.joje.dbee.repository;
 
 import java.util.List;
 

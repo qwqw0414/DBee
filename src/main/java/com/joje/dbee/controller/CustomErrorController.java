@@ -1,4 +1,4 @@
-package com.joje.dbee.controller.error;
+package com.joje.dbee.controller;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.joje.dbee.service.account;
+package com.joje.dbee.service;
 
 import com.joje.dbee.entity.account.UserEntity;
 

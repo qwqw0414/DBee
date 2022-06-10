@@ -1,4 +1,4 @@
-package com.joje.dbee.dao.user;
+package com.joje.dbee.dao.impl;
 
 import java.util.List;
 import java.util.Map;
@@ -6,6 +6,8 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.joje.dbee.dao.UserDao;
 
 @Repository(value = "UserDao")
 public class UserDaoImpl implements UserDao{

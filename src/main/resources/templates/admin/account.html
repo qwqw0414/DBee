@@ -5,6 +5,13 @@
     layout:decorator="layout/admin-layout">
 
 <style layout:fragment="style">
+    table#userTable tbody tr:hover {
+        background-color: rgb(228, 234, 238);
+    }
+
+    .modal-body div.input-group-prepend span {
+        width: 100px;
+    }
 </style>
 
 <div layout:fragment="content" class="container-fluid">
@@ -285,7 +292,7 @@
                         });
 
                         console.log('html', sHtml);
-                        
+
                         $userTable.find("tbody").html(sHtml);
                         $userTable.DataTable();
                     }

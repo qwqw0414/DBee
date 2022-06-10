@@ -41,7 +41,7 @@ spring:
       
 # Mybatis
 mybatis:
-  type-aliases-package: com.joje.dive.**.vo
+  type-aliases-package: com.joje.dbee.vo.**
   mapper-locations: mappers/**/*.xml
   configuration:
     map-underscore-to-camel-case: true

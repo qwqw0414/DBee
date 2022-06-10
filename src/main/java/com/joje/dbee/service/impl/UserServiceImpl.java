@@ -1,4 +1,4 @@
-package com.joje.dbee.service.account;
+package com.joje.dbee.service.impl;
 
 import java.util.List;
 
@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.joje.dbee.entity.account.RoleEntity;
 import com.joje.dbee.entity.account.UserEntity;
-import com.joje.dbee.repository.account.RoleRepository;
-import com.joje.dbee.repository.account.UserRepository;
+import com.joje.dbee.repository.RoleRepository;
+import com.joje.dbee.repository.UserRepository;
+import com.joje.dbee.service.UserService;
 
 @Service(value = "UserService")
 public class UserServiceImpl implements UserService{

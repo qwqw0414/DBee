@@ -1,4 +1,4 @@
-package com.joje.dbee.controller.home;
+package com.joje.dbee.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
