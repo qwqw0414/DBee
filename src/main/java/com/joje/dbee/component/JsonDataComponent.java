@@ -17,12 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 @Component(value = "JsonDataComponent")
 public class JsonDataComponent {
 
+	private final String JSON_PATH = this.getClass().getResource("/static/assets/json").getPath();
+	
 	private Gson gson = new Gson();
 	
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> get(String fileName) {
 		
-		String path = this.getClass().getResource("/static/assets/json/" + fileName).getPath();
+		String path = JSON_PATH + fileName;
 		Map<String, Object> result = null;
 		
 		File file = new File(path);
