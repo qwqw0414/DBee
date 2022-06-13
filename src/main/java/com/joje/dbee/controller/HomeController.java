@@ -36,7 +36,7 @@ public class HomeController {
 		mav.setViewName("index");
 		mav.addObject(resultVo);
 
-		log.info("[resultVo]=[{}]", resultVo);
+		log.debug("[resultVo]=[{}]", resultVo);
 		
 		return mav;
 	}
