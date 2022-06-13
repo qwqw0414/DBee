@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JsonConfigComponent {
 
 	private final String JSON_PATH = this.getClass().getResource("/static/assets/json").getPath();
-
+	
 	private Gson gson = new Gson();
 
 	@SuppressWarnings("unchecked")
@@ -49,6 +49,17 @@ public class JsonConfigComponent {
 		return menus;
 	}
 
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getRegexp() {
+		Map<String, Object> regexpMap = null;
+		String jsonStr = this.readJson("regexp.json");
+		
+		regexpMap = gson.fromJson(jsonStr, Map.class);
+		log.debug("[regexpMap]=[{}]", regexpMap);
+		
+		return regexpMap;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public String readJson(String fileName) {
 

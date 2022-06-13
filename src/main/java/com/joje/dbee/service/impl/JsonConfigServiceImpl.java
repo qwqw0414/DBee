@@ -32,7 +32,20 @@ public class JsonConfigServiceImpl implements JsonConfigService {
 		return (List<HomeMenuVo>) configMap.get(MAP_KEY);
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public String getRegexp(String key) {
+		return this.getRegexp().get(key);
+	}
 	
-	
-	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, String> getRegexp() {
+		final String MAP_KEY = "regexp";
+		
+		if(!configMap.containsKey(MAP_KEY) || configMap.get(MAP_KEY) == null)
+			configMap.put(MAP_KEY, jsonConfigComponent.getRegexp());
+		
+		return (Map<String, String>) configMap.get(MAP_KEY);
+	}
 }

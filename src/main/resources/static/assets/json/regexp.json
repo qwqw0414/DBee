@@ -1,7 +1,5 @@
 {
-    "account" : {
-        "userId" : "^[a-z]+[a-z0-9]{5,19}$",
-        "userName" : "^[a-z가-힣]{2,8}$",
-        "password" : "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$"
-    }
+    "account.userId" : "^[a-z]+[a-z0-9]{5,19}$",
+    "account.userName" : "^[a-z가-힣]{2,8}$",
+    "account.password" : "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$"
 }
