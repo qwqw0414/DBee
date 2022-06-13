@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @WebFilter(urlPatterns = "/*")
 public class LoggerFilter implements Filter{
 
-	private static final String[] EXCLUDE_PATHS = { "assets" };
+	private static final String[] EXCLUDE_PATHS = { "assets", "favicon.ico" };
 	private static Gson gson = new Gson();
 
 	@Override

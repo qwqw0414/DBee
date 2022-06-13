@@ -15,7 +15,7 @@ import com.joje.dbee.common.interceptor.CommonInterceptor;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-	private static final String[] EXCLUDE_PATHS = { "/assets/**", "/error"};
+	private static final String[] EXCLUDE_PATHS = { "/assets/**", "/error", "/favicon.ico"};
 	
 	/**
 	 * 인터셉터 핸들링

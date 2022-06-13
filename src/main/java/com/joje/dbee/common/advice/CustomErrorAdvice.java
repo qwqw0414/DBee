@@ -3,6 +3,8 @@ package com.joje.dbee.common.advice;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,7 +23,7 @@ public class CustomErrorAdvice {
 	
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<?> customErrorException(RuntimeException e){
-		
+
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("errorCode", StatusCode.INTERNAL_SERVER_ERROR.getCode());
 		resultMap.put("errorMessage", StatusCode.INTERNAL_SERVER_ERROR.getMessage());

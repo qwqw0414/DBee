@@ -11,15 +11,7 @@
 <div layout:fragment="content" class="container-fluid">
 
     <div id="hexWrapper">
-        <ul id="hexGrid">
-            <li class="hex">
-                <div class="hexIn">
-                    <a class="hexLink" href="#">
-                        <img src="https://farm9.staticflickr.com/8461/8048823381_0fbc2d8efb.jpg" alt="" />
-                    </a>
-                </div>
-            </li>
-        </ul>
+        <ul id="hexGrid"></ul>
     </div>
 
 </div>
@@ -38,27 +30,12 @@
 </th:block>
 
 <script layout:fragment="script" th:inline="javascript">
-
+$(()=>{
     let $hexGrid = $("ul#hexGrid");
-    let oHexData = [
-        { "title": "test" },
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
-    ]
-
+    let oHexData = JSON.parse('[[${resultVo.data.menus}]]');
+    console.log(oHexData);
     $hexGrid.html(drawHex(oHexData));
-
+})
 </script>
 
 </html>
