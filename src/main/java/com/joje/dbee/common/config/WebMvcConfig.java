@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.joje.dbee.common.interceptor.AccountInterceptor;
 import com.joje.dbee.common.interceptor.CommonInterceptor;
 
 @EnableWebMvc
@@ -24,6 +25,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new CommonInterceptor()).addPathPatterns("/**")
 														.excludePathPatterns(EXCLUDE_PATHS);
+		
+//		Account관련 데이터 유효성 처리 인터셉터
+		String[] accountPath = {
+				"/dbee/account/signup",
+				"/dbee/admin/account/update"
+		};
+		registry.addInterceptor(new AccountInterceptor()).addPathPatterns(accountPath);
+		
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}
 

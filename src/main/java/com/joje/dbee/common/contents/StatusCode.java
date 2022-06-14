@@ -4,6 +4,7 @@ public enum StatusCode {
 
 	SUCCESS(100, "요청 완료"),
 	FAILED_ERROR(200, "요청 실패"),
+	FAILED_INVALID(200, "잘못된 파라미터 값"),
 	FORBIDDEN(403, "해당 요청에 권한이 없습니다."),
 	NOT_FOUND(404, "페이지를 찾을 수 없습니다."),
 	INTERNAL_SERVER_ERROR(500, "서버 에러");

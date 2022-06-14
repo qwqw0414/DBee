@@ -24,6 +24,12 @@ public class ResultVo {
 		this.data = new HashMap<>();
 	}
 	
+	public ResultVo(StatusCode status) {
+		this.status = status;
+		this.code = status.getCode();
+		this.data = new HashMap<>();
+	}
+	
 	public void put(String key, Object obj) {
 		data.put(key, obj);
 	}

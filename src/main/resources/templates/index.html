@@ -27,15 +27,19 @@
 </li> -->
 <th:block layout:fragment="source">
     <script th:src="@{/assets/js/home/hex.js}"></script>
+    <script th:src="@{/assets/js/account/account.js}"></script>
 </th:block>
 
 <script layout:fragment="script" th:inline="javascript">
 $(()=>{
+
     let $hexGrid = $("ul#hexGrid");
     let oHexData = JSON.parse('[[${resultVo.data.menus}]]');
     console.log(oHexData);
     $hexGrid.html(drawHex(oHexData));
-})
+
+
+});
 </script>
 
 </html>

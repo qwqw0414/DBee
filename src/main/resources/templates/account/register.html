@@ -41,12 +41,12 @@
                                     placeholder="비밀번호" name="password">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control form-control-user" id="password_chk"
-                                    placeholder="비밀번호 확인">
+                                <input type="password" class="form-control form-control-user" id="passwordChk"
+                                    placeholder="비밀번호 확인" name="passwordChk">
                             </div>
-                            <a class="btn btn-primary btn-user btn-block text-light" id="registerBtn">
+                            <button class="btn btn-primary btn-user btn-block text-light" id="registerBtn">
                                 Register Account
-                            </a>
+                            </button>
                         </form>
                         <!-- // 회원가입 폼 -->
                         <hr>
@@ -64,101 +64,30 @@
 
 </div>
 
+<th:block layout:fragment="source">
+    <script th:src="@{/assets/js/account/account.js}"></script>
+</th:block>
+
 <script layout:fragment="script" th:inline="javascript">
     $(() => {
         const $alert = $("#alertArea div.alert");
-
-
-        const oExpTable = {
-            "userId": /^[a-z]+[a-z0-9]{5,19}$/,    //6 ~ 20 영문 시작 숫자 포함
-            "userName": /^[a-z가-힣]{2,8}$/,       //2 ~ 8 한글만
-            "password": /^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$/ //영 대소문자 특문 숫자 포함
-        }
-
-
-        // 공통 함수
-        function fn_reg(key, value) {
-            var result = oExpTable[key].test(value);
-            console.log("fn_reg", key, result, oExpTable[key]);
-            return result;
-        }
-
+        const $form = $("#registerForm");
 
         // 이벤트 핸들링
-        $("#registerBtn").on("click", fn_submit);
-        $("#userId").on("focusout", fn_duplicateCheck);
+        $("#registerBtn").on("click", (e) => {
+            let invalidId = submit($form, $alert);
+            $form.find("#" + invalidId).focus();
+            e.preventDefault();
+        });
 
-
-        function fn_duplicateCheck() {
+        // 아이디 중복 체크
+        $("#userId").on("focusout", ()=>{
             var userId = $("#userId").val();
-
-            if (userId === undefined || userId.length <= 4) {
-                return false;
+            if (userId !== undefined && userId.length > 3) {
+                isDuplicateId(userId, $alert);
             }
+        });
 
-            $.ajax({
-                url: "/dbee/account/duple/" + userId,
-                type: "GET",
-                dataType: "JSON",
-                success: (data) => {
-                    var idCount = data.data.countId;
-
-                    if (idCount > 0) {
-                        $("#userId").focus();
-                        $alert.show();
-                        $alert.text("중복된 아이디입니다.");
-                    }
-                    else {
-                        $alert.hide();
-                    }
-                },
-                complete: () => {
-
-                },
-                error: (e, x, c) => {
-                    console.log(e, x, c);
-                }
-
-            });
-        }
-
-
-        function fn_submit() {
-            var $userId = $("#userId");
-            var $userName = $("#userName");
-            var $password = $("#password");
-            var $password_chk = $("#password_chk");
-
-            if (!fn_reg("userId", $userId.val())) {
-                $alert.show();
-                $alert.text("아이디를 입력해주세요.");
-                $userId.focus();
-                return false;
-            }
-
-            if (!fn_reg("userName", $userName.val())) {
-                $alert.show();
-                $alert.text("이름을 입력해주세요.");
-                $userName.focus();
-                return false;
-            }
-
-            // if(!fn_reg("password", $password.val())){
-            //     $alert.show();
-            //     $alert.text("비밀번호를 입력해주세요.");
-            //     $password.focus();
-            //     return false;
-            // }
-
-            // if($password.val() === $password_chk.val()){
-            //     $alert.show();
-            //     $alert.text("비밀번호가 서로 일치하지 않습니다.");
-            //     $password.focus();
-            //     return false;
-            // }
-
-            $("#registerForm").submit();
-        }
     });
 
 </script>

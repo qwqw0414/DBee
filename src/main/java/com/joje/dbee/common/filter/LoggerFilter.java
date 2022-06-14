@@ -39,11 +39,11 @@ public class LoggerFilter implements Filter{
 			if (contentType != null && contentType.startsWith("application/json")) {
 				ReadableRequestWrapper requestWrapper = new ReadableRequestWrapper((HttpServletRequest) request);
 				log.debug("RequestBody : {}", HttpUtil.getBody(requestWrapper));
+				chain.doFilter(requestWrapper, response);
 			} else {
 				log.debug("ParameterMap : {}", gson.toJson(request.getParameterMap()));
+				chain.doFilter(request, response);
 			}
-
-			chain.doFilter(request, response);
 
 			log.debug("=================== << {} END {} << ===================\n", method, url);
 		} else {
