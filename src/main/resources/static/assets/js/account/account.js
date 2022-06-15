@@ -64,5 +64,34 @@ function submit($form, $alert) {
         return "password";
     }
 
-    $form.submit();
+    let data = {
+        "userId": userId,
+        "userName": userName,
+        "password": password
+    }
+
+    $.ajax({
+        url: "/dbee/account/signup",
+        type: "POST",
+        dataType: "JSON",
+        // contentType: 'application/json; charset=utf-8',
+        contentType: 'application/x-www-form-urlencoded',
+        // data: JSON.stringify(data),
+        data: data,
+        beforeSend: (xhr) => {
+            xhr.setRequestHeader(_header, _token);
+        },
+        success: (data) => {
+            console.log(data);
+            if (data.code == "100") {
+                location.href = "/dbee/account/login";
+            }
+        },
+        complete: () => {
+
+        },
+        error: (e, x, c) => {
+            console.log(e, x, c);
+        }
+    });
 }

@@ -109,8 +109,8 @@
 <script layout:fragment="script" th:inline="javascript">
     $(() => {
         const $userTable = $("#userTable");
-        let token = $("meta[name='_csrf']").attr("content");
-        let header = $("meta[name='_csrf_header']").attr("content");
+        let _token = $("meta[name='_csrf']").attr("content");
+        let _header = $("meta[name='_csrf_header']").attr("content");
 
         // 이벤트 핸들링
         $("#btnUserUpdate").on("click", fn_UpdateUserDetail);
@@ -232,7 +232,7 @@
                 dataType: "json",
                 data: JSON.stringify(oParam),
                 beforeSend: (xhr) => {
-                    xhr.setRequestHeader(header, token);
+                    xhr.setRequestHeader(_header, _token);
                 },
                 success: (oResult) => {
                     console.log(oResult);

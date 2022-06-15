@@ -27,7 +27,7 @@
                         </div>
 
                         <!-- 회원가입 폼 -->
-                        <form class="user" id="registerForm" th:action="@{/dbee/account/signup}" method="post">
+                        <form class="user" id="registerForm" method="post">
                             <div class="form-group">
                                 <input type="text" class="form-control form-control-user" id="userId" placeholder="아이디"
                                     name="userId">
@@ -44,15 +44,15 @@
                                 <input type="password" class="form-control form-control-user" id="passwordChk"
                                     placeholder="비밀번호 확인" name="passwordChk">
                             </div>
-                            <button class="btn btn-primary btn-user btn-block text-light" id="registerBtn">
+                            <a class="btn btn-primary btn-user btn-block text-light" id="registerBtn">
                                 Register Account
-                            </button>
+                            </a>
                         </form>
                         <!-- // 회원가입 폼 -->
                         <hr>
-                        <div class="text-center">
+                        <!-- <div class="text-center">
                             <a class="small" href="forgot-password.html">Forgot Password?</a>
-                        </div>
+                        </div> -->
                         <div class="text-center">
                             <a class="small" th:href="@{/dbee/account/login}">Already have an account? Login!</a>
                         </div>

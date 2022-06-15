@@ -1,18 +1,27 @@
 package com.joje.dbee.controller.rest;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.joje.dbee.common.contents.StatusCode;
+import com.joje.dbee.entity.account.UserEntity;
 import com.joje.dbee.service.UserService;
 import com.joje.dbee.vo.common.ResultVo;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping(value = "/dbee/account")
 public class AccountRestController {
@@ -33,6 +42,30 @@ public class AccountRestController {
 		ResultVo resultVo = new ResultVo();
 		resultVo.setStatus(StatusCode.SUCCESS);
 		resultVo.put("countId", countId);
+		
+		return new ResponseEntity<>(gson.toJson(resultVo), HttpStatus.OK);
+	}
+	
+	/**
+	 * 회원 가입
+	 * 
+	 */
+	@PostMapping(value = "/signup")
+	public ResponseEntity<?> register(@RequestParam(value = "userId") String userId,
+									  @RequestParam(value = "userName") String userName,
+									  @RequestParam(value = "password") String password) throws Exception {
+
+		UserEntity user = new UserEntity();
+		user.setUserId(userId);
+		user.setUserName(userName);
+		user.setPassword(password);
+
+		log.debug("[user]=[{}]", user);
+		
+		userService.save(user);
+		
+		ResultVo resultVo = new ResultVo();
+		resultVo.setStatus(StatusCode.SUCCESS);
 		
 		return new ResponseEntity<>(gson.toJson(resultVo), HttpStatus.OK);
 	}
