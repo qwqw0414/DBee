@@ -4,15 +4,23 @@
     xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorator="layout/blank-layout">
 
+<!-- CSS -->
 <style layout:fragment="style">
 </style>
 
+<!-- HTML -->
 <div layout:fragment="content" class="container-fluid">
 </div>
 
+<!-- Modal -->
 <block layout:fragment="modal">
 </block>
 
+<!-- JS import -->
+<th:block layout:fragment="source">
+</th:block>
+
+<!-- JS -->
 <script layout:fragment="script" th:inline="javascript">
 </script>
 

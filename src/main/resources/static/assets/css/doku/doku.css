@@ -1,0 +1,57 @@
+/* doku.doku.css */
+
+#dokuTable .cell {
+    background-color: rgb(223, 229, 235);
+    width: 46px;
+    height: 46px;
+    font-size: 1.6em;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 1px;
+    border-radius: 0.2em;
+    border: 3px solid rgba(0, 0, 0, 0);
+    color: rgb(22, 37, 104);
+}
+
+table#dokuTable {
+    margin: 5px;
+    /* width: 467px; */
+}
+
+#card {
+    width: 520px;
+    margin: auto;
+}
+
+#dokuTable tr:nth-child(3n) div {
+    margin-bottom: 8px;
+}
+
+#dokuTable td:nth-child(3n) div {
+    margin-right: 8px;
+}
+
+#dokuTable tr:nth-child(9n) div {
+    margin-bottom: 1px;
+}
+
+#dokuTable td:nth-child(9n) div {
+    margin-right: 1px;
+}
+
+#dokuTable .cell:hover {
+    z-index: 100;
+    box-shadow: 0 0 7px rgb(22, 37, 104);
+}
+
+#dokuTable .cell-on {
+    border: 3px solid rgb(22, 37, 104);
+}
+
+.haha {
+    animation: wobble-hor-bottom 0.8s both;
+}
+
+.shake {
+    animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+}

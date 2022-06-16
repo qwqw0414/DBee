@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="layout/account-layout">
+
+<!-- CSS -->
+<style layout:fragment="style">
+    @import url("/assets/css/doku/doku.css");
+</style>
+
+<!-- HTML -->
+<div layout:fragment="content" class="container-fluid">
+    <div class="card shadow mb-4" id="card">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h2 class="m-0 font-weight-bold text-primary">DOCKER</h2>
+            <div id="sideMenu">
+                <div id="sideBtn">
+                    <button id="runBtn" class="btn btn-primary btn-circle btn-sm font-weight-bold">R</button>
+                    <button id="resetBtn" class="btn btn-danger btn-circle btn-sm font-weight-bold">X</button>
+                </div>
+                <div id="sideSpinner" class="spinner-border text-primary" style="display: none;"></div>
+            </div>
+        </div>
+        <div class="card-body text-center" style="margin: auto;">
+            <table class="text-dark" id="dokuTable">
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<block layout:fragment="modal">
+</block>
+
+<!-- JS import -->
+<th:block layout:fragment="source">
+    <script th:src="@{/assets/js/doku/doku-core.js}" type="text/javascript"></script>
+    <script th:src="@{/assets/js/doku/doku-main.js}" type="text/javascript"></script>
+</th:block>
+
+<!-- JS -->
+<script layout:fragment="script" th:inline="javascript">
+$(() => {
+    let cell_index = -1;
+    let $table = $("#dokuTable");
+
+
+    // 마우스 이벤트
+    $(document).on("click", (e) => {
+        let $e = $(e.target);
+        if (!$e.hasClass('cell-on')) {
+            $(".cell-on").removeClass("cell-on");
+        }
+    });
+
+    // 키 이벤트
+    $(document).on("keydown", (e) => {
+        let key = Number(e.key);
+        let keyCode = e.keyCode;
+        let $target = $(".cell-on");
+
+        if ($target.length > 0) {
+            // cell-on 숫자값 입력
+            if (key && (key > 0 && key <= 9)) {
+                $target.text(key);
+            }
+            else if (keyCode == 8) {
+                $target.text("");
+            }
+            // cell-on 방향 이동
+            else if (keyCode >= 37 && keyCode <= 40) {
+                $cells = $(".cell");
+
+                // left
+                if (keyCode == 37) {
+                    cell_index--;
+                }
+                // right
+                else if (keyCode == 39) {
+                    cell_index++;
+                }
+                // up
+                else if (keyCode == 38) {
+                    cell_index -= 9;
+                }
+                //down
+                else {
+                    cell_index += 9;
+                }
+
+                cell_index %= 81;
+
+                $(".cell-on").removeClass("cell-on");
+                $cells.eq(cell_index).addClass("cell-on");
+                e.preventDefault();
+            }
+
+        }
+    });
+
+    // 버튼 이벤트
+    $("#resetBtn").on("click", () => {
+        $("#card").addClass("haha");
+        draw();
+        setTimeout(() => {
+            $("#card").removeClass("haha");
+        }, 800);
+    });
+    $("#runBtn").on("click", runDoku);
+
+    draw();
+
+    // 함수
+    function runDoku() {
+        let $cells = $(".cell");
+        let dokuData = "";
+
+        for (let i = 0; i < $cells.length; i++) {
+            let num = $cells.eq(i).text();
+            dokuData += num !== undefined && num.length == 1 ? num : '0';
+        }
+
+        if (dokuData !== undefined && dokuData.length == 81) {
+            let doku = new Doku(dokuData);
+            $("#sideBtn").hide();
+            $("#sideSpinner").show();
+
+            setTimeout(() => {
+                doku.solution();
+                if (doku.isComplete()) {
+                    writeDoku(doku.getString());
+                }
+                else {
+                    let $h2 = $("#card h2");
+                    $("#card").addClass("shake");
+                    $h2.removeClass("text-primary");
+                    $h2.addClass("text-danger");
+
+                    setTimeout(() => {
+                        $("#card").removeClass("shake");
+                        $h2.removeClass("text-danger");
+                        $h2.addClass("text-primary");
+                    }, 800);
+                }
+                $("#sideSpinner").hide();
+                $("#sideBtn").show();
+            }, 100);
+        }
+    }
+
+    function writeDoku(data) {
+        if (data !== undefined && data.length == 81) {
+            let $cells = $(".cell");
+
+            for (let i = 0; i < $cells.length; i++) {
+                $cells.eq(i).text(data.charAt(i));
+            }
+        }
+    }
+
+    function draw() {
+        let html = '';
+        for (let i = 0; i < 9; i++) {
+            html += '<tr>'
+            for (let j = 0; j < 9; j++) {
+                html += '<td><div class="cell"></div></td>';
+            }
+            html += '</tr>'
+        }
+        $table.html(html);
+
+        $(".cell").on("click", (e) => {
+            let $e = $(e.target);
+            $(".cell-on").removeClass("cell-on");
+            $e.addClass("cell-on");
+
+            // 활성화된 cell 인덱스 Get
+            $cells = $(".cell");
+            for (let i = 0; i < $cells.length; i++) {
+                if ($cells.eq(i).hasClass("cell-on")) {
+                    cell_index = i;
+                    break;
+                }
+            }
+        });
+        // writeDoku(gugus.d);
+    }
+});
+</script>
+
+</html>

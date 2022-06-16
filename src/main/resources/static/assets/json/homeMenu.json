@@ -1,32 +1,8 @@
 [
     {
-        "menuNo" : "0",
-        "menuTitle" : "TEST",
+        "menuNo" : "1",
+        "menuTitle" : "Doku",
         "menuImage" : "/assets/img/home/default.jpg",
-        "requestUrl" : ""
-    },
-    {
-        "menuNo" : "0",
-        "menuTitle" : "TEST",
-        "menuImage" : "/assets/img/home/default.jpg",
-        "requestUrl" : ""
-    },
-    {
-        "menuNo" : "0",
-        "menuTitle" : "TEST",
-        "menuImage" : "/assets/img/home/default.jpg",
-        "requestUrl" : ""
-    },
-    {
-        "menuNo" : "0",
-        "menuTitle" : "TEST",
-        "menuImage" : "/assets/img/home/default.jpg",
-        "requestUrl" : ""
-    },
-    {
-        "menuNo" : "0",
-        "menuTitle" : "TEST",
-        "menuImage" : "/assets/img/home/default.jpg",
-        "requestUrl" : ""
+        "requestUrl" : "/dbee/doku"
     }
 ]
