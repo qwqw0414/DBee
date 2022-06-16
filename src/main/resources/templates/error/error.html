@@ -2,7 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
     xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorator="layout/center-layout">
+    layout:decorator="layout/error-layout">
 
 <!-- CSS -->
 <style layout:fragment="style">
@@ -12,7 +12,7 @@
 <div layout:fragment="content">
     <div class="text-center">
         <div class="error mx-auto mb-5" th:data-text="${errorCode}" th:text="${errorCode}"></div>
-        <p class="text-dark mb-2" th:text="${errorMessage}"></p>
+        <h4 class="text-dark mb-3" th:text="${errorMessage}"></h4>
         <a th:href="@{/dbee}">Back to Home</a>
     </div>
 </div>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>DBee</title>
+
+    <!-- 헤더 -->
+    <th:block th:replace="fragments/head.html :: head"></th:block>
+
+    <!-- CSS -->
+    <style layout:fragment="style"></style>
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <!-- 높이 유지 -->
+        <ul class="navbar-nav sidebar" style="width: 0px !important;"></ul>
+
+        <!-- Contents -->
+        <!-- <div id="content-wrapper" class="d-flex flex-column bg-gradient-light"> -->
+        <div id="content-wrapper" class="d-flex flex-column bg-light">
+            <div id="content">
+                <div class="h-100">
+                    <table class="h-100 w-100">
+                        <tr>
+                            <td class="align-middle">
+                                <div layout:fragment="content"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <th:block th:replace="fragments/footer.html :: footer"></th:block>
+        </div>
+    </div>
+    
+    <!-- Script Source -->
+    <th:block th:replace="fragments/source.html :: source"></th:block>
+    <th:block layout:fragment="source"></th:block>
+
+    <!-- JAVA SCRIPT -->
+	<script layout:fragment="script"></script>
+</body>
+
+</html>
