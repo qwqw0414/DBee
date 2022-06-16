@@ -4,5 +4,11 @@
         "menuTitle" : "Doku",
         "menuImage" : "/assets/img/home/default.jpg",
         "requestUrl" : "/dbee/doku"
+    },
+    {
+        "menuNo" : "2",
+        "menuTitle" : "Hipword",
+        "menuImage" : "/assets/img/home/default.jpg",
+        "requestUrl" : "/dbee/hipword"
     }
 ]

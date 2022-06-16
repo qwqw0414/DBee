@@ -5,12 +5,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(value = "/dbee/doku")
-public class DokuController {
+@RequestMapping(value = "/dbee/hipword")
+public class HipwordController {
 
+	
 	@GetMapping(value = "")
-	public String viewDokuMainPage() throws Exception {
-		return "doku/doku-main";
+	public String viewHipwordMainPage() throws Exception {
+		return "hipword/hipword-main";
 	}
 	
 }
