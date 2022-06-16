@@ -73,11 +73,19 @@
         const $alert = $("#alertArea div.alert");
         const $form = $("#registerForm");
 
-        // 이벤트 핸들링
+        // 로그인 버튼 이벤트
         $("#registerBtn").on("click", (e) => {
             let invalidId = submit($form, $alert);
             $form.find("#" + invalidId).focus();
             e.preventDefault();
+        });
+
+        // 폼 작성중 엔터키 이벤트 설정
+        $("#registerForm input").on("keypress", (e)=>{
+            if(e.keyCode && e.keyCode === 13){
+                let invalidId = submit($form, $alert);
+                $form.find("#" + invalidId).focus();
+            }
         });
 
         // 아이디 중복 체크
@@ -87,7 +95,6 @@
                 isDuplicateId(userId, $alert);
             }
         });
-
     });
 
 </script>
