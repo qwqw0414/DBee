@@ -1,8 +1,10 @@
 let regexp = new DbeeRegExp();
 
-
-
-
+/**
+ * 아이디 중복 체크
+ * @param {*} userId 
+ * @param {*} $alert 
+ */
 function isDuplicateId(userId, $alert) {
     // let $alert = $(alert);
 
@@ -31,8 +33,13 @@ function isDuplicateId(userId, $alert) {
     });
 }
 
-
-function submit($form, $alert) {
+/**
+ * 회원가입
+ * @param {*} $form 
+ * @param {*} $alert 
+ * @returns 
+ */
+function register($form, $alert) {
     let formData = new FormData($form[0]);
 
     let userId = formData.get("userId");
@@ -94,4 +101,6 @@ function submit($form, $alert) {
             console.log(e, x, c);
         }
     });
+
+    return "";
 }

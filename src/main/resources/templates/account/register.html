@@ -8,7 +8,6 @@
 </style>
 
 <div layout:fragment="content" class="container">
-
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
@@ -61,7 +60,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <th:block layout:fragment="source">
@@ -75,7 +73,7 @@
 
         // 로그인 버튼 이벤트
         $("#registerBtn").on("click", (e) => {
-            let invalidId = submit($form, $alert);
+            let invalidId = register($form, $alert);
             $form.find("#" + invalidId).focus();
             e.preventDefault();
         });
@@ -83,7 +81,7 @@
         // 폼 작성중 엔터키 이벤트 설정
         $("#registerForm input").on("keypress", (e)=>{
             if(e.keyCode && e.keyCode === 13){
-                let invalidId = submit($form, $alert);
+                let invalidId = register($form, $alert);
                 $form.find("#" + invalidId).focus();
             }
         });
