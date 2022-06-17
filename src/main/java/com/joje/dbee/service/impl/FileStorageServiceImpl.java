@@ -77,8 +77,6 @@ public class FileStorageServiceImpl implements FileStorageService {
 
 	@Override
 	public Path getPath(String dir, String fileName) throws Exception {
-		
-//		Path filePath = this.fileStorageLocation.resolve(path);
 		Path path = new File(this.fileStoragePath + dir).toPath();
 		this.mkDir(path);
 		return path.resolve(fileName);
