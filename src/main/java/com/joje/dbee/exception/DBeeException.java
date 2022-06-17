@@ -13,7 +13,6 @@ public class DBeeException extends RuntimeException {
 	}
 	
 	public DBeeException(StatusCode status) {
-		super(status.getMessage());
 		this.status = status;
 	}
 

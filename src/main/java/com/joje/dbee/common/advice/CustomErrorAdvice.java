@@ -28,7 +28,7 @@ public class CustomErrorAdvice {
 
 //		결과 셋
 		ResultVo resultVo = new ResultVo(e.getStatus());
-		resultVo.put("message", e.getMessage());
+		resultVo.put("message", e.getStatus().getMessage());
 		log.info("[resultVo]=[{}]", resultVo);
 		log.error(e.getMessage());
 

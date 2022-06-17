@@ -39,6 +39,9 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
       
+file:
+  uplad-dir: ./upload
+
 # Mybatis
 mybatis:
   type-aliases-package: com.joje.dbee.vo.**
