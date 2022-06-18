@@ -42,6 +42,8 @@ public class CustomErrorAdvice {
 	@ExceptionHandler(RuntimeException.class)
 	public String runtimeException(RuntimeException e, HttpServletRequest request, HttpServletResponse response) {
 
+		log.error("runtimeException : {}", e.getMessage());
+		
 		e.printStackTrace();
 		request.setAttribute("errorCode", "500");
 		request.setAttribute("errorMessage", e.getMessage());

@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class FileStorageServiceImpl implements FileStorageService {
 
 //	업로드 디렉토리 절대경로
-	private final String fileStorageLocation;
+	private final Path fileStorageLocation;
 
 //	업로드 디렉토리 상대경로
 	private final String fileStoragePath;
@@ -32,17 +32,17 @@ public class FileStorageServiceImpl implements FileStorageService {
 	@Autowired
 	public FileStorageServiceImpl(FileStorageProperties fileStorageProperties) {
 		this.fileStoragePath = fileStorageProperties.getUpladDir();
-		this.fileStorageLocation = Paths.get(FilenameUtils.getName(fileStoragePath)).toAbsolutePath().normalize().toString();
+		this.fileStorageLocation = Paths.get(FilenameUtils.getName(fileStoragePath)).toAbsolutePath().normalize();
 
 		try {
-			Files.createDirectories(Paths.get(fileStorageLocation));
+			Files.createDirectories(fileStorageLocation);
 		} catch (Exception e) {
 			throw new FileStorageException("디렉토리 생성 실패 path=" + this.fileStorageLocation, e);
 		}
 	}
 
 	@Override
-	public void write(String contetns, Path path) throws Exception {
+	public void write(String contetns, Path path) {
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(path.toFile()))) {
 			bw.write(contetns);
 			log.info("File Write [path]=[{}]", path);
@@ -52,7 +52,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 	}
 
 	@Override
-	public void write(List<String> contents, Path path) throws Exception {
+	public void write(List<String> contents, Path path) {
 		String writeData = "";
 		for (int i = 0; i < contents.size(); i++) {
 			writeData += (contents.size() - 1 == i) ? contents.get(i) : contents.get(i) + "\n";
@@ -61,7 +61,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 	}
 
 	@Override
-	public File readToFile(Path path) throws Exception {
+	public File readToFile(Path path) {
 		File file = path.toFile();
 
 		if (!file.isFile())
@@ -71,26 +71,12 @@ public class FileStorageServiceImpl implements FileStorageService {
 	}
 
 	@Override
-	public boolean isFile(Path path) throws Exception {
+	public boolean isFile(Path path) {
 		return path.toFile().isFile();
 	}
 
 	@Override
-	public Path getPath(String dir, String fileName) throws Exception {
-		Path path = new File(this.fileStoragePath + dir).toPath();
-		this.mkDir(path);
-		return path.resolve(fileName);
-	}
-
-	private void mkDir(Path path) throws Exception {
-		try {
-			File file = new File(path.toString());
-			if (!file.isDirectory()) {
-				file.mkdirs();
-				log.info("mkdir : 디렉토리 생성 [path]=[{}]", file.getPath());
-			}
-		} catch (Exception e) {
-			throw new FileStorageException("디렉토리 생성 실패 path=" + path.getFileName(), e);
-		}
+	public Path getPath(String fileName) {
+		return this.fileStorageLocation.resolve(fileName);
 	}
 }
