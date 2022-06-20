@@ -8,7 +8,7 @@ import com.joje.dbee.exception.BadRequestException;
 
 public class ParamUtil {
 
-	public static String getString(Object param) throws BadRequestException {
+	public static String toStr(Object param) throws BadRequestException {
 		try {
 			if (param != null) {
 				String result = (String) param;
@@ -22,7 +22,7 @@ public class ParamUtil {
 		throw new BadRequestException("Invalid Param : data is null");
 	}
 
-	public static String getString(Object param, String defaultValue) throws BadRequestException {
+	public static String toStr(Object param, String defaultValue) throws BadRequestException {
 		try {
 			if (param != null) {
 				String result = (String) param;
@@ -36,7 +36,7 @@ public class ParamUtil {
 		return defaultValue;
 	}
 
-	public static int getInt(Object param) throws BadRequestException {
+	public static int toInt(Object param) throws BadRequestException {
 		try {
 			if (param != null) {
 				return (int) param;
@@ -47,7 +47,7 @@ public class ParamUtil {
 		throw new BadRequestException("Invalid Param : data is null");
 	}
 
-	public static int getInt(Object param, int defaultValue) throws BadRequestException {
+	public static int toInt(Object param, int defaultValue) throws BadRequestException {
 		try {
 			if (param != null) {
 				return (int) param;
@@ -58,7 +58,7 @@ public class ParamUtil {
 		return defaultValue;
 	}
 
-	public static long getLong(Object param) throws BadRequestException {
+	public static long toLong(Object param) throws BadRequestException {
 		try {
 			if (param != null) {
 				return (long) param;
@@ -69,7 +69,7 @@ public class ParamUtil {
 		throw new BadRequestException("Invalid Param : data is null");
 	}
 
-	public static long getLong(Object param, long defaultValue) throws BadRequestException {
+	public static long toLong(Object param, long defaultValue) throws BadRequestException {
 		try {
 			if (param != null) {
 				return (long) param;
@@ -80,7 +80,7 @@ public class ParamUtil {
 		return defaultValue;
 	}
 
-	public static double getDouble(Object param) throws BadRequestException {
+	public static double toDouble(Object param) throws BadRequestException {
 		try {
 			if (param != null) {
 				return (double) param;
@@ -91,7 +91,7 @@ public class ParamUtil {
 		throw new BadRequestException("Invalid Param : data is null");
 	}
 
-	public static double getDouble(Object param, double defaultValue) throws BadRequestException {
+	public static double toDouble(Object param, double defaultValue) throws BadRequestException {
 		try {
 			if (param != null) {
 				return (double) param;
@@ -103,7 +103,7 @@ public class ParamUtil {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> getMap(Object param) throws BadRequestException {
+	public static Map<String, Object> toMap(Object param) throws BadRequestException {
 		try {
 			if (param != null) {
 				return new Gson().fromJson(param.toString(), Map.class);
@@ -114,7 +114,7 @@ public class ParamUtil {
 		throw new BadRequestException("Invalid Param : data is null");
 	}
 
-	public static List<?> getList(Object param) throws BadRequestException {
+	public static List<?> toList(Object param) throws BadRequestException {
 		try {
 			if (param != null) {
 				return new Gson().fromJson(param.toString(), List.class);

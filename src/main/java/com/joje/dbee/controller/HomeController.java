@@ -40,7 +40,7 @@ public class HomeController {
 	@ResponseBody 
 	public ResponseEntity<?> test(@RequestBody Map<String, Object> body) throws Exception {
 		
-		String string = ParamUtil.getString(body.get("valueString"), "123");
+		String string = ParamUtil.toStr(body.get("valueString"), "123");
 		
 		log.debug("[body]=[{}]", body);
 		log.debug("[valueString]=[{}]", string);

@@ -81,10 +81,10 @@ function register($form, $alert) {
         url: "/dbee/account/signup",
         type: "POST",
         dataType: "JSON",
-        // contentType: 'application/json; charset=utf-8',
-        contentType: 'application/x-www-form-urlencoded',
-        // data: JSON.stringify(data),
-        data: data,
+        contentType: 'application/json; charset=utf-8',
+        // contentType: 'application/x-www-form-urlencoded',
+        data: JSON.stringify(data),
+        // data: data,
         beforeSend: (xhr) => {
             xhr.setRequestHeader(_header, _token);
         },

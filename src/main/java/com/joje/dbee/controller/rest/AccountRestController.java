@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.joje.dbee.common.contents.StatusCode;
+import com.joje.dbee.common.utils.ParamUtil;
 import com.joje.dbee.entity.account.UserEntity;
 import com.joje.dbee.service.UserService;
 import com.joje.dbee.vo.common.ResultVo;
@@ -51,14 +52,12 @@ public class AccountRestController {
 	 * 
 	 */
 	@PostMapping(value = "/signup")
-	public ResponseEntity<?> register(@RequestParam(value = "userId") String userId,
-									  @RequestParam(value = "userName") String userName,
-									  @RequestParam(value = "password") String password) throws Exception {
+	public ResponseEntity<?> register(@RequestBody Map<String, Object> body) throws Exception {
 
 		UserEntity user = new UserEntity();
-		user.setUserId(userId);
-		user.setUserName(userName);
-		user.setPassword(password);
+		user.setUserId(ParamUtil.toStr(body.get("userId")));
+		user.setUserName(ParamUtil.toStr(body.get("userName")));
+		user.setPassword(ParamUtil.toStr(body.get("password")));
 
 		log.debug("[user]=[{}]", user);
 		
