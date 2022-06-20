@@ -24,8 +24,8 @@ public class CustomErrorAdvice {
 
 	private Gson gson = new Gson();
 	
-	@ExceptionHandler(DBeeException.class)
 	@ResponseBody
+	@ExceptionHandler(DBeeException.class)
 	public ResponseEntity<?> dbeeException(DBeeException e) {
 
 //		결과 셋
@@ -41,12 +41,10 @@ public class CustomErrorAdvice {
 		return new ResponseEntity<>(gson.toJson(resultVo), resHeaders, HttpStatus.OK);
 	}
 
-	@ExceptionHandler(BadRequestException.class)
 	@ResponseBody
+	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<?> badRequestHandler(BadRequestException e) {
-		
 		log.error(e.getMessage());
-		
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	

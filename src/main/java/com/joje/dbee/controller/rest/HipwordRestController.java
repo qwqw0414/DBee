@@ -66,7 +66,7 @@ public class HipwordRestController {
 		return new ResponseEntity<>(gson.toJson(resultVo), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/song/{type}", produces = "application/json; charset=utf8")
+	@GetMapping(value = "/get/{type}", produces = "application/json; charset=utf8")
 	public ResponseEntity<?> searchSongByKeword(@PathVariable(value = "type") String type,
 												@RequestParam(value = "keyword") String keyword) throws Exception {
 
@@ -74,19 +74,24 @@ public class HipwordRestController {
 		String searchUrl = URL_MAP.get("melon.search") + keyword;
 		String songId = hipwordService.getSongIdByKeyword(httpRequestService.requestHtml(searchUrl));
 
-		Document detailDoc = httpRequestService.requestHtml(URL_MAP.get("melon.song") + songId);
-
-		String songTitle = hipwordService.getSongTitleByMelon(detailDoc);
-		ArtistVo artist = hipwordService.getArtistByMelon(detailDoc);
-		AlbumVo album = hipwordService.getAlbumByMelon(detailDoc);
-		List<String> lyrics = hipwordService.getLyricsByMelon(detailDoc);
-
+		log.debug("[songId]=[{}]", songId);
+		
 		SongVo song = new SongVo();
-		song.setSongId(songId);
-		song.setSongTitle(songTitle);
-		song.setLyrics(lyrics);
-		song.setAlbum(album.getAlbumName());
-		song.setArtist(artist.getArtistName());
+		
+		if(songId != null && songId.length() > 0) {
+			Document detailDoc = httpRequestService.requestHtml(URL_MAP.get("melon.song") + songId);
+
+			String songTitle = hipwordService.getSongTitleByMelon(detailDoc);
+			ArtistVo artist = hipwordService.getArtistByMelon(detailDoc);
+			AlbumVo album = hipwordService.getAlbumByMelon(detailDoc);
+			List<String> lyrics = hipwordService.getLyricsByMelon(detailDoc);
+			
+			song.setSongId(songId);
+			song.setSongTitle(songTitle);
+			song.setLyrics(lyrics);
+			song.setAlbum(album.getAlbumName());
+			song.setArtist(artist.getArtistName());
+		}
 
 		ResultVo resultVo = new ResultVo();
 		resultVo.put("song", song);

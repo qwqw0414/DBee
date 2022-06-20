@@ -12,14 +12,15 @@
 	<!-- err log file name -->
 	<property name="ERR_LOG_FILE_NAME" value="err_log" />
 	<!-- pattern value = %-5level %d{yy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] - %msg%n -->
-	<property name="LOG_PATTERN" value="%green(%d{yy-MM-dd HH:mm:ss}) %highlight(%-5level) %boldCyan([%logger{0}:%line]) %msg%n" />
+	<property name="LOG_PATTERN_CONSOL" value="%green(%d{yy-MM-dd HH:mm:ss}) %highlight(%-5level) %boldCyan([%logger{0}:%line]) %msg%n" />
+	<property name="LOG_PATTERN_FILE" value="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35} - %msg%n" />
 	
 	
 	<!-- Console Appender -->
 	<appender name="CONSOLE"
 		class="ch.qos.logback.core.ConsoleAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<pattern>${LOG_PATTERN}</pattern>
+			<pattern>${LOG_PATTERN_CONSOL}</pattern>
 		</encoder>
 	</appender>
 	
@@ -31,7 +32,7 @@
 		
 		<!-- 출력패턴 설정 -->
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<pattern>${LOG_PATTERN}</pattern>
+			<pattern>${LOG_PATTERN_FILE}</pattern>
 		</encoder>
 		
 		<!-- Rolling 정책 -->
@@ -60,7 +61,7 @@
 		<file>${LOG_PATH}/${ERR_LOG_FILE_NAME}.log</file>
 		<encoder
 			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<pattern>${LOG_PATTERN}</pattern>
+			<pattern>${LOG_PATTERN_FILE}</pattern>
 		</encoder>
 		<!-- Rolling 정책 -->
 		<rollingPolicy

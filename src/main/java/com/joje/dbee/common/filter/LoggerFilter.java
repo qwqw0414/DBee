@@ -19,7 +19,7 @@ import com.joje.dbee.common.utils.ReadableRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Order(value = 1)
+@Order(value = 0)
 @WebFilter(urlPatterns = "/dbee/*")
 public class LoggerFilter implements Filter{
 
