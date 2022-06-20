@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.joje.dbee.common.contents.StatusCode;
+import com.joje.dbee.exception.BadRequestException;
 import com.joje.dbee.exception.DBeeException;
 import com.joje.dbee.vo.common.ResultVo;
 
@@ -39,6 +41,15 @@ public class CustomErrorAdvice {
 		return new ResponseEntity<>(gson.toJson(resultVo), resHeaders, HttpStatus.OK);
 	}
 
+	@ExceptionHandler(BadRequestException.class)
+	@ResponseBody
+	public ResponseEntity<?> badRequestHandler(BadRequestException e) {
+		
+		log.error(e.getMessage());
+		
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
+	
 	@ExceptionHandler(RuntimeException.class)
 	public String runtimeException(RuntimeException e, HttpServletRequest request, HttpServletResponse response) {
 

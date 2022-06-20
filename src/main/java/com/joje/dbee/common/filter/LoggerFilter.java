@@ -10,6 +10,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.core.annotation.Order;
+
 import com.google.gson.Gson;
 import com.joje.dbee.common.utils.HttpUtil;
 import com.joje.dbee.common.utils.ReadableRequestWrapper;
@@ -17,6 +19,7 @@ import com.joje.dbee.common.utils.ReadableRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Order(value = 1)
 @WebFilter(urlPatterns = "/dbee/*")
 public class LoggerFilter implements Filter{
 

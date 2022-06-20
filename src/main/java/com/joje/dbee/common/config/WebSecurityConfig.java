@@ -77,12 +77,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	      .dataSource(dataSource)
 	      .passwordEncoder(passwordEncoder())
 	      .usersByUsernameQuery("select user_id, password, enabled "
-	        + "from tb_user "
-	        + "where user_id = ?")
+	    		  			  + "from tb_user "
+	    		  			  + "where user_id = ?")
 	      .authoritiesByUsernameQuery("select u.user_id, r.role_name "
-	        + "from tb_user_role ur inner join tb_user u on ur.user_no = u.user_no "
-	        + "inner join tb_role r on ur.role_id = r.role_id "
-	        + "where u.user_id = ?");
+	    		  					+ "from tb_user_role ur inner join tb_user u on ur.user_no = u.user_no "
+	    		  					+ "inner join tb_role r on ur.role_id = r.role_id "
+	    		  					+ "where u.user_id = ?");
 	}
 	
 	//  패스워드 인코더

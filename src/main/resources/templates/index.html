@@ -38,6 +38,38 @@ $(()=>{
     console.log(oHexData);
     $hexGrid.html(drawHex(oHexData));
 
+    test();
+
+    function test() {
+
+        let data = {
+            // "valueString" : "value",
+            "valueInt" : 0,
+            "valueArray" : ["123", "123"]
+        };
+
+        $.ajax({
+            url: "/dbee/test",
+            type: "POST",
+            dataType: "JSON",
+            contentType: 'application/json; charset=utf-8',
+            // contentType: 'application/x-www-form-urlencoded',
+            data: JSON.stringify(data),
+            // data: data,
+            beforeSend: (xhr) => {
+                xhr.setRequestHeader(_header, _token);
+            },
+            success: (data) => {
+                console.log(data);
+            },
+            complete: () => {
+
+            },
+            error: (e, x, c) => {
+                console.log(e, x, c);
+            }
+        });
+    }
 
 });
 </script>
