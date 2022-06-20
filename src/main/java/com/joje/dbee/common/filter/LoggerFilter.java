@@ -15,6 +15,7 @@ import org.springframework.core.annotation.Order;
 import com.google.gson.Gson;
 import com.joje.dbee.common.utils.HttpUtil;
 import com.joje.dbee.common.utils.ReadableRequestWrapper;
+import com.joje.dbee.common.utils.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +36,7 @@ public class LoggerFilter implements Filter{
 		String method = httpRequest.getMethod();
 		String contentType = request.getContentType();
 
-		if (isInclude(url)) {
+		if (StringUtil.isInclude(url, EXCLUDE_PATHS)) {
 			// Request Logging
 			log.info("=================== >> {} START {} >> ===================", method, url);
 			log.debug("ContentType : {}", contentType);
@@ -53,14 +54,4 @@ public class LoggerFilter implements Filter{
 			chain.doFilter(request, response);
 		}
 	}
-
-//	Exclude URL 유효성 검사
-	private boolean isInclude(String url) {
-		for (String i : EXCLUDE_PATHS) {
-			if (url.contains(i))
-				return false;
-		}
-		return true;
-	}
-
 }
