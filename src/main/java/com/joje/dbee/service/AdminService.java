@@ -5,12 +5,12 @@ import java.util.Map;
 
 public interface AdminService {
 	
-	public int countUserByKeyword(Map<String, Object> param) throws RuntimeException;
+	int countUserByKeyword(Map<String, Object> param) throws RuntimeException;
 
-	public List<Map<String, Object>> searchUserByKeyword(Map<String, Object> param) throws RuntimeException;
+	List<Map<String, Object>> searchUserByKeyword(Map<String, Object> param) throws RuntimeException;
 
-	public Map<String, Object> getUserInfo(long userNo) throws RuntimeException;
+	Map<String, Object> getUserInfo(long userNo) throws RuntimeException;
 
-	public int updateUserDetail(Map<String, Object> param) throws RuntimeException;
+	int updateUserDetail(Map<String, Object> param) throws RuntimeException;
 	
 }

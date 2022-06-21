@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface FileStorageService {
 
-	public void write(String contetns, Path path);
+	void write(String contetns, Path path);
 
-	public void write(List<String> contents, Path path);
+	void write(List<String> contents, Path path);
 
-	public File readToFile(Path path);
+	File readToFile(Path path);
 
-	public boolean isFile(Path path);
+	boolean isFile(Path path);
 
-	public Path getPath(String fileName);
+	Path getPath(String fileName);
 }

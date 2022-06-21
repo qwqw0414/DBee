@@ -6,6 +6,7 @@ public enum StatusCode {
 	FAILED_ERROR(200, "요청 실패"),
 	FAILED_INVALID(201, "잘못된 파라미터 값"),
 	FAILED_NO_DATA(202, "해당 정보를 찾을 수 없습니다."),
+	FAILED_CONNECT(203, "타 서버간 요청이 원활하지 않습니다."),
 	FORBIDDEN(403, "해당 요청에 권한이 없습니다."),
 	NOT_FOUND(404, "페이지를 찾을 수 없습니다."),
 	INTERNAL_SERVER_ERROR(500, "서버 에러");

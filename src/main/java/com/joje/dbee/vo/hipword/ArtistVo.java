@@ -15,7 +15,6 @@ public class ArtistVo implements Serializable {
 
 	private static final long serialVersionUID = -2582064199334849513L;
 
-	private Integer artistNo;
 	private String artistId;
 	private String artistName;
 

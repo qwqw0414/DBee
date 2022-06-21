@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,12 +19,9 @@ public class SongVo implements Serializable {
 
 	private static final long serialVersionUID = 9051520495401102128L;
 
-	private Integer songNo;
 	private String songId;
 	private String songTitle;
 	private String artist;
-	private String album;
-	private List<String> lyrics;
-	private Date regDate;
-
+	private String lyrics;
+	
 }
