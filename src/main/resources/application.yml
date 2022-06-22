@@ -31,6 +31,12 @@ spring:
     hibernate:
       ddl-auto: none
       
+# Batch
+  batch:
+    initialize-schema: never
+    job:
+      enabled: false
+      
 # File
   servlet:
     multipart:

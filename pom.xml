@@ -142,17 +142,32 @@
 			<version>3.3.4</version>
 		</dependency>
 
+		<!-- Spring Configuration -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
 		
+		<!-- common io -->
 		<dependency>
 		    <groupId>commons-io</groupId>
 		    <artifactId>commons-io</artifactId>
 		    <version>2.6</version>
 		</dependency>
+		
+		<!-- batch -->
+<!-- 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-batch</artifactId>
+		</dependency> -->
+		
+		<!-- quartz 스케줄 -->
+<!-- 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-quartz</artifactId>
+		</dependency> -->
+		
 	</dependencies>
 
 	<build>

@@ -59,6 +59,11 @@ public class CustomErrorAdvice {
 		return new ResponseEntity<>(gson.toJson(resultVo), resHeaders, HttpStatus.OK);
 	}
 
+	/**
+	 * 잘못된 요청시 발생하는 에러 핸들링
+	 * @param e
+	 * @return
+	 */
 	@ResponseBody
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<?> badRequestException(BadRequestException e) {
