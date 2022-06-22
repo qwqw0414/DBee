@@ -14,7 +14,7 @@ public interface HipwordService {
 
 	List<String> getLyricsToMelon(Document doc);
 
-	String getSongIdToMelon(Document doc);
+	String getSongIdToMelon(String keyword);
 
 	String getSongTitleByMelon(Document doc);
 

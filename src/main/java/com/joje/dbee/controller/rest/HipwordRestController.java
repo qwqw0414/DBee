@@ -47,25 +47,13 @@ public class HipwordRestController {
 	}
 
 	@GetMapping(value = "/test", produces = "application/json; charset=utf8")
-	public ResponseEntity<?> test() throws Exception {
+	public ResponseEntity<?> test(@RequestParam String keyword) throws Exception {
 
-//		차트 조회
-		List<SongRankVo> songs = hipwordService.getChartListToMelon();
-
-		if(songs != null && songs.size() > 0) {
-			for(SongRankVo vo : songs) {
-				hipwordService.insertSong(vo.getSongId());
-			}
-		}
-
-		hipwordService.insertSongRank(songs);
-		
-		String now = "2022-06-21";
-		List<SongRankVo> rankList = hipwordService.selectAllSongRankByDate(now);
+		String id = hipwordService.getSongIdToMelon(keyword);
+		log.debug("[id]=[{}]", id);
 		
 //		결과 셋
 		ResultVo resultVo = new ResultVo();
-		resultVo.put("rankList", rankList);
 		
 		return new ResponseEntity<>(gson.toJson(resultVo), HttpStatus.OK);
 	}
@@ -86,8 +74,7 @@ public class HipwordRestController {
 												@RequestParam(value = "keyword") String keyword) throws Exception {
 		
 //		Song 아이디 조회
-		String searchUrl = URL_MAP.get("melon.search") + keyword;
-		String songId = hipwordService.getSongIdToMelon(httpRequestComponent.requestHtml(searchUrl));
+		String songId = hipwordService.getSongIdToMelon(keyword);
 		log.debug("[songId]=[{}]", songId);
 		
 		SongVo song = null;

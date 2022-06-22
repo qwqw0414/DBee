@@ -20,6 +20,7 @@ import com.joje.dbee.common.utils.DateUtil;
 import com.joje.dbee.common.utils.StringUtil;
 import com.joje.dbee.component.HttpRequestComponent;
 import com.joje.dbee.dao.HipwordDao;
+import com.joje.dbee.repository.HipwordRepository;
 import com.joje.dbee.service.HipwordService;
 import com.joje.dbee.vo.hipword.ArtistVo;
 import com.joje.dbee.vo.hipword.SongRankVo;
@@ -43,6 +44,9 @@ public class HipwordServiceImpl implements HipwordService {
 
 	@Autowired
 	private HttpRequestComponent httpRequestComponent;
+
+	@Autowired
+	private HipwordRepository hipwordRepository;
 	
 	@Autowired
 	private HipwordDao hipwordDao;
@@ -90,7 +94,10 @@ public class HipwordServiceImpl implements HipwordService {
 	}
 
 	@Override
-	public String getSongIdToMelon(Document doc) {
+	public String getSongIdToMelon(String keyword) {
+		String searchUrl = URL_MAP.get("melon.search") + keyword;
+		Document doc = httpRequestComponent.requestHtml(searchUrl);
+		
 		Elements tables = doc.select("#frm_songList table");
 		Elements a = tables.eq(0).select("td.t_left a");
 		
