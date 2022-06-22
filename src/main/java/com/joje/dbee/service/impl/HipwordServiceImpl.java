@@ -20,7 +20,10 @@ import com.joje.dbee.common.utils.DateUtil;
 import com.joje.dbee.common.utils.StringUtil;
 import com.joje.dbee.component.HttpRequestComponent;
 import com.joje.dbee.dao.HipwordDao;
-import com.joje.dbee.repository.HipwordRepository;
+import com.joje.dbee.entity.hipword.ArtistEntity;
+import com.joje.dbee.entity.hipword.SongEntity;
+import com.joje.dbee.repository.ArtistRepository;
+import com.joje.dbee.repository.SongRepository;
 import com.joje.dbee.service.HipwordService;
 import com.joje.dbee.vo.hipword.ArtistVo;
 import com.joje.dbee.vo.hipword.SongRankVo;
@@ -46,7 +49,10 @@ public class HipwordServiceImpl implements HipwordService {
 	private HttpRequestComponent httpRequestComponent;
 
 	@Autowired
-	private HipwordRepository hipwordRepository;
+	private SongRepository songRepository;
+
+	@Autowired
+	private ArtistRepository artistRepository;
 	
 	@Autowired
 	private HipwordDao hipwordDao;
@@ -179,6 +185,37 @@ public class HipwordServiceImpl implements HipwordService {
 	@Override
 	public List<SongRankVo> selectAllSongRankByDate(String now) {
 		return hipwordDao.selectAllSongRankByDate(now);
+	}
+
+	@Override
+	public SongEntity addSong(String songId) {
+		
+		if(songRepository.countBySongId(songId) < 1) {
+			
+			Document doc = httpRequestComponent.requestHtml(URL_MAP.get("melon.song") + songId);
+			
+			ArtistVo avo = this.getArtistByMelon(doc);
+			
+			ArtistEntity artist = new ArtistEntity();
+			
+			if (artistRepository.countByArtistId(avo.getArtistId()) < 1) {
+				artist.setArtistId(avo.getArtistId());
+				artist.setArtistName(avo.getArtistName());
+				artist = artistRepository.save(artist);
+			} else {
+				artist = artistRepository.findByArtistId(avo.getArtistId());
+			}
+			
+			SongEntity song = new SongEntity();
+			song.setSongId(songId);;
+			song.setSongTitle(this.getSongTitleByMelon(doc));
+			song.setArtist(artist);
+			song.setLyrics(StringUtil.toStr(this.getLyricsToMelon(doc), "\n"));
+			
+			songRepository.save(song);
+		}
+		
+		return null;
 	}
 
 }

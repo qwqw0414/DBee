@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import lombok.Data;
@@ -25,7 +26,8 @@ public class SongEntity {
 	private String songTitle;
 	private String lyrics;
 	
-	@OneToOne(mappedBy = "ARTIST_NO")
+	@OneToOne()
+	@JoinColumn(name = "ARTIST_NO")
 	private ArtistEntity artist;
 	
 	

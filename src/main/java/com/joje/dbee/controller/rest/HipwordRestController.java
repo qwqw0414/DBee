@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.joje.dbee.common.utils.StringUtil;
 import com.joje.dbee.component.HttpRequestComponent;
+import com.joje.dbee.entity.hipword.SongEntity;
 import com.joje.dbee.service.HipwordService;
 import com.joje.dbee.vo.common.ResultVo;
 import com.joje.dbee.vo.hipword.SongRankVo;
@@ -51,6 +52,8 @@ public class HipwordRestController {
 
 		String id = hipwordService.getSongIdToMelon(keyword);
 		log.debug("[id]=[{}]", id);
+		
+		SongEntity song = hipwordService.addSong(id);
 		
 //		결과 셋
 		ResultVo resultVo = new ResultVo();
