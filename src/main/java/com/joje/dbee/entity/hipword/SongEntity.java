@@ -1,10 +1,13 @@
 package com.joje.dbee.entity.hipword;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import lombok.Data;
@@ -26,9 +29,8 @@ public class SongEntity {
 	private String songTitle;
 	private String lyrics;
 	
-	@OneToOne()
+	@OneToOne
 	@JoinColumn(name = "ARTIST_NO")
 	private ArtistEntity artist;
-	
 	
 }
