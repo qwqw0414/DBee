@@ -18,10 +18,10 @@ import com.joje.dbee.common.utils.StringUtil;
 import com.joje.dbee.component.HttpRequestComponent;
 import com.joje.dbee.entity.hipword.ArtistEntity;
 import com.joje.dbee.entity.hipword.SongEntity;
+import com.joje.dbee.repository.hipword.ArtistRepository;
+import com.joje.dbee.repository.hipword.RankRepository;
+import com.joje.dbee.repository.hipword.SongRepository;
 import com.joje.dbee.entity.hipword.RankEntity;
-import com.joje.dbee.repository.ArtistRepository;
-import com.joje.dbee.repository.RankRepository;
-import com.joje.dbee.repository.SongRepository;
 import com.joje.dbee.service.HipwordService;
 
 import lombok.extern.slf4j.Slf4j;

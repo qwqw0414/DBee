@@ -16,7 +16,7 @@ import com.joje.dbee.common.utils.StringUtil;
 import com.joje.dbee.entity.hipword.SongEntity;
 import com.joje.dbee.entity.hipword.RankEntity;
 import com.joje.dbee.service.HipwordService;
-import com.joje.dbee.vo.common.ResultVo;
+import com.joje.dbee.vo.ResultVo;
 
 import lombok.extern.slf4j.Slf4j;
 

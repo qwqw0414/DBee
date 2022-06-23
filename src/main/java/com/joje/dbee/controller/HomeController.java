@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 import com.joje.dbee.common.utils.ParamUtil;
 import com.joje.dbee.component.JsonConfigComponent;
 import com.joje.dbee.service.MenuService;
-import com.joje.dbee.vo.common.ResultVo;
+import com.joje.dbee.vo.ResultVo;
 
 import lombok.extern.slf4j.Slf4j;
 

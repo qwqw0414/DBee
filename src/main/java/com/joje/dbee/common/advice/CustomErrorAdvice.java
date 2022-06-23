@@ -15,7 +15,7 @@ import com.joje.dbee.common.contents.StatusCode;
 import com.joje.dbee.exception.BadRequestException;
 import com.joje.dbee.exception.DBeeException;
 import com.joje.dbee.exception.HttpRequestException;
-import com.joje.dbee.vo.common.ResultVo;
+import com.joje.dbee.vo.ResultVo;
 
 import lombok.extern.slf4j.Slf4j;
 

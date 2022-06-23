@@ -12,14 +12,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import lombok.EqualsAndHashCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity(name = "TB_USER")
-@EqualsAndHashCode
 public class UserEntity {
 
 	@Id
@@ -32,7 +32,8 @@ public class UserEntity {
 	private LocalDateTime regDate = LocalDateTime.now();
 	private boolean enabled;
 	
-	@ManyToMany
+	@JsonIgnore
+	@ManyToMany()
 	@JoinTable(
 			name = "TB_USER_ROLE",
 			joinColumns = @JoinColumn(name = "USER_NO"),
@@ -41,7 +42,7 @@ public class UserEntity {
 	
 	@Override
 	public String toString() {
-		return "UserVo [userNo=" + userNo + ", userId=" + userId + ", userName=" + userName + ", password=" + password
+		return "UserEntity [userNo=" + userNo + ", userId=" + userId + ", userName=" + userName + ", password=" + password
 				+ ", regDate=" + regDate + ", enabled=" + enabled + "]";
 	}
 	

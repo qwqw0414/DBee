@@ -1,6 +1,5 @@
 package com.joje.dbee.entity.hipword;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -15,9 +14,7 @@ import lombok.Data;
 
 @Data
 @Entity(name = "TB_HIPWORD_RANK")
-public class RankEntity implements Serializable {
-
-	private static final long serialVersionUID = 6037139687498666914L;
+public class RankEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +23,8 @@ public class RankEntity implements Serializable {
 	private Integer songRank;
 	private LocalDate regDate = LocalDate.now();
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "songNo")
 	private SongEntity song;
-	
-	
 	
 }

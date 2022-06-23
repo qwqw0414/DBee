@@ -26,10 +26,7 @@ public class SongEntity implements Serializable {
 	private String songTitle;
 	private String lyrics;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "artistNo")
 	private ArtistEntity artist;
-	
-//	private List<SongRankVo> ranks;
-	
 }

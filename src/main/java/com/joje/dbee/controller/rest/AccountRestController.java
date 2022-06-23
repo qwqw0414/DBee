@@ -18,7 +18,7 @@ import com.joje.dbee.common.contents.StatusCode;
 import com.joje.dbee.common.utils.ParamUtil;
 import com.joje.dbee.entity.account.UserEntity;
 import com.joje.dbee.service.UserService;
-import com.joje.dbee.vo.common.ResultVo;
+import com.joje.dbee.vo.ResultVo;
 
 import lombok.extern.slf4j.Slf4j;
 

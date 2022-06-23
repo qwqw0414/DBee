@@ -1,4 +1,4 @@
-package com.joje.dbee.repository;
+package com.joje.dbee.repository.hipword;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

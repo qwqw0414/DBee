@@ -1,4 +1,4 @@
-package com.joje.dbee.vo.common;
+package com.joje.dbee.vo;
 
 import java.util.HashMap;
 import java.util.Map;

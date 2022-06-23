@@ -19,8 +19,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.joje.dbee.common.contents.StatusCode;
 import com.joje.dbee.service.AdminService;
+import com.joje.dbee.vo.ResultVo;
 import com.joje.dbee.vo.common.PaginationVo;
-import com.joje.dbee.vo.common.ResultVo;
 
 import lombok.extern.slf4j.Slf4j;
 

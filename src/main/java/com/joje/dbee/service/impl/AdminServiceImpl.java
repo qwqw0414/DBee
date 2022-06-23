@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.joje.dbee.dao.UserDao;
 import com.joje.dbee.entity.account.UserEntity;
-import com.joje.dbee.repository.RoleRepository;
-import com.joje.dbee.repository.UserRepository;
+import com.joje.dbee.repository.account.RoleRepository;
+import com.joje.dbee.repository.account.UserRepository;
 import com.joje.dbee.service.AdminService;
 
 import lombok.extern.slf4j.Slf4j;

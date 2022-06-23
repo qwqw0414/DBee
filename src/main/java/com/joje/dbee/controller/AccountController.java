@@ -14,9 +14,6 @@ import com.joje.dbee.service.UserService;
 @RequestMapping(value = "/dbee/account")
 public class AccountController {
 
-	@Autowired
-	private UserService userService;
-	
 	/**
 	 * 로그인 페이지 이동
 	 * @return
@@ -36,24 +33,4 @@ public class AccountController {
 	public String viewRegisterPage() throws Exception {
 		return "account/register";
 	}
-	
-	/**
-	 * 회원가입 처리
-	 * @param user
-	 * @return
-	 * @throws Exception
-	 */
-//	@PostMapping(value = "/signup")
-//	public String register(@RequestParam String userId, 
-//						   @RequestParam String userName, 
-//						   @RequestParam String password) throws Exception {
-//
-//		UserEntity user = new UserEntity();
-//		user.setUserId(userId);
-//		user.setUserName(userName);
-//		user.setPassword(password);
-//		
-//		userService.save(user);
-//		return "account/login";
-//	}
 }

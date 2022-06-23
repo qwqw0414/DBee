@@ -21,8 +21,4 @@ public class ArtistEntity implements Serializable {
 	
 	private String artistId;
 	private String artistName;
-	
-//	@OneToMany(mappedBy = "artist")
-//	private List<SongEntity> songs;
-	
 }
