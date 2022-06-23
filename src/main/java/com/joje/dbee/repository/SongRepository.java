@@ -10,4 +10,6 @@ public interface SongRepository extends JpaRepository<SongEntity, Long> {
 
 	int countBySongId(String songId);
 
+	SongEntity findBySongId(String songId);
+
 }

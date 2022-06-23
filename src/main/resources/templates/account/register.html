@@ -90,6 +90,7 @@
         $("#userId").on("focusout", ()=>{
             var userId = $("#userId").val();
             if (userId !== undefined && userId.length > 3) {
+                console.log(userId);
                 isDuplicateId(userId, $alert);
             }
         });

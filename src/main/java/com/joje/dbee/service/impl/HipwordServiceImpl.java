@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.transaction.Transactional;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -16,18 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.joje.dbee.common.utils.DateUtil;
 import com.joje.dbee.common.utils.StringUtil;
 import com.joje.dbee.component.HttpRequestComponent;
-import com.joje.dbee.dao.HipwordDao;
 import com.joje.dbee.entity.hipword.ArtistEntity;
 import com.joje.dbee.entity.hipword.SongEntity;
+import com.joje.dbee.entity.hipword.RankEntity;
 import com.joje.dbee.repository.ArtistRepository;
+import com.joje.dbee.repository.RankRepository;
 import com.joje.dbee.repository.SongRepository;
 import com.joje.dbee.service.HipwordService;
-import com.joje.dbee.vo.hipword.ArtistVo;
-import com.joje.dbee.vo.hipword.SongRankVo;
-import com.joje.dbee.vo.hipword.SongVo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,33 +50,32 @@ public class HipwordServiceImpl implements HipwordService {
 	private ArtistRepository artistRepository;
 	
 	@Autowired
-	private HipwordDao hipwordDao;
+	private RankRepository rankRepository;
 	
+//	아이디 매칭 패턴
 	private static Pattern regexp = Pattern.compile("\\d+");
 	
 	@Override
-	public List<SongRankVo> getChartListToMelon() {
-		List<SongRankVo> songs = new ArrayList<>();
+	public List<RankEntity> getChartListToMelon() {
+		List<RankEntity> ranks = new ArrayList<>();
 		Document doc = httpRequestComponent.requestHtml(URL_MAP.get("melon.chart"));
 		
 		Elements elmts = doc.select("tbody tr");
 
 		for (Element elmt : elmts) {
-			String album = elmt.selectFirst("a").attr("title");
-			int rank = Integer.parseInt(elmt.selectFirst("span.rank").text());
 			String id = elmt.attr("data-song-no");
-			String title = elmt.selectFirst(".wrap_song_info .rank01 a").text();
-			String artist = elmt.selectFirst(".wrap_song_info .rank02 a").text();
+			int rank = Integer.parseInt(elmt.selectFirst("span.rank").text());
 
-			SongRankVo vo = new SongRankVo();
-			vo.setSongId(id);
-			vo.setSongTitle(title);
-			vo.setArtist(artist);
-			vo.setSongRank(rank);
+			SongEntity songEntity = new SongEntity();
+			songEntity.setSongId(id);
 
-			songs.add(vo);
+			RankEntity rankEntity = new RankEntity();
+			rankEntity.setSongRank(rank);
+			rankEntity.setSong(songEntity);
+			
+			ranks.add(rankEntity);
 		}
-		return songs;
+		return ranks;
 	}
 
 	@Override
@@ -130,8 +124,8 @@ public class HipwordServiceImpl implements HipwordService {
 	}
 
 	@Override
-	public ArtistVo getArtistByMelon(Document doc) {
-		ArtistVo artist = new ArtistVo();
+	public ArtistEntity getArtistByMelon(Document doc) {
+		ArtistEntity artist = new ArtistEntity();
 		Element elmt = doc.selectFirst("div.artist");
 		
 //		가수명 조회
@@ -148,56 +142,17 @@ public class HipwordServiceImpl implements HipwordService {
 		return artist;
 	}
 	
-
-	
-	@Override
-	@Transactional
-	public void insertSong(String songId) {
-		if(hipwordDao.countSongById(songId) < 1) {
-			Document doc = httpRequestComponent.requestHtml(URL_MAP.get("melon.song") + songId);
-			
-			ArtistVo artist = this.getArtistByMelon(doc);
-			log.debug("[artist]=[{}]", artist);
-			if(hipwordDao.countArtistById(artist.getArtistId()) < 1) {
-				int result = hipwordDao.insertArtist(artist);
-			}
-			
-			Map<String, Object> song = new HashMap<>();
-			song.put("songId", songId);
-			song.put("songTitle", this.getSongTitleByMelon(doc));
-			song.put("artistId", artist.getArtistId());
-			song.put("lyrics", StringUtil.toStr(this.getLyricsToMelon(doc), "\n"));
-			
-			hipwordDao.insertSong(song);
-		}
-	}
-
-	@Override
-	public SongVo selectOneSongById(String songId) {
-		return hipwordDao.selectOneSongById(songId);
-	}
-
-	@Override
-	public int insertSongRank(List<SongRankVo> songs) {
-		return hipwordDao.insertAllSongRank(songs);
-	}
-
-	@Override
-	public List<SongRankVo> selectAllSongRankByDate(String now) {
-		return hipwordDao.selectAllSongRankByDate(now);
-	}
-
 	@Override
 	public SongEntity addSong(String songId) {
 		
+		SongEntity songEntity = null;
+		
+//		DB에 해당 곡 정보가 있는지 여부 판단
 		if(songRepository.countBySongId(songId) < 1) {
-			
+//			없다면 크롤링
 			Document doc = httpRequestComponent.requestHtml(URL_MAP.get("melon.song") + songId);
-			
-			ArtistVo avo = this.getArtistByMelon(doc);
-			
+			ArtistEntity avo = this.getArtistByMelon(doc);
 			ArtistEntity artist = new ArtistEntity();
-			
 			if (artistRepository.countByArtistId(avo.getArtistId()) < 1) {
 				artist.setArtistId(avo.getArtistId());
 				artist.setArtistName(avo.getArtistName());
@@ -206,16 +161,35 @@ public class HipwordServiceImpl implements HipwordService {
 				artist = artistRepository.findByArtistId(avo.getArtistId());
 			}
 			
+//			저장 정보 셋
 			SongEntity song = new SongEntity();
 			song.setSongId(songId);;
 			song.setSongTitle(this.getSongTitleByMelon(doc));
 			song.setArtist(artist);
 			song.setLyrics(StringUtil.toStr(this.getLyricsToMelon(doc), "\n"));
 			
-			songRepository.save(song);
+			songEntity = songRepository.save(song);
+		} else {
+			songEntity = songRepository.findBySongId(songId);
 		}
 		
-		return null;
+		return songEntity;
+	}
+	
+
+	@Override
+	public int addRank(List<RankEntity> ranks) {
+		for(RankEntity rank : ranks) {
+			
+			log.debug("[rank]=[{}]", rank);
+			String songId = rank.getSong().getSongId();
+			
+			SongEntity songEntity = songRepository.findBySongId(songId);
+			rank.setSong(songEntity);
+		}
+		
+		rankRepository.saveAll(ranks);
+		return 0;
 	}
 
 }

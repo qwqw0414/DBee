@@ -14,7 +14,7 @@ function isDuplicateId(userId, $alert) {
         dataType: "JSON",
         success: (data) => {
             var idCount = data.data.countId;
-
+            console.log(data);
             if (idCount > 0) {
                 $("#userId").focus();
                 $alert.show();

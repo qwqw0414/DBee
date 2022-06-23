@@ -4,14 +4,13 @@ import java.util.List;
 
 import org.jsoup.nodes.Document;
 
+import com.joje.dbee.entity.hipword.ArtistEntity;
 import com.joje.dbee.entity.hipword.SongEntity;
-import com.joje.dbee.vo.hipword.ArtistVo;
-import com.joje.dbee.vo.hipword.SongRankVo;
-import com.joje.dbee.vo.hipword.SongVo;
+import com.joje.dbee.entity.hipword.RankEntity;
 
 public interface HipwordService {
 
-	List<SongRankVo> getChartListToMelon();
+	List<RankEntity> getChartListToMelon();
 
 	List<String> getLyricsToMelon(Document doc);
 
@@ -19,16 +18,9 @@ public interface HipwordService {
 
 	String getSongTitleByMelon(Document doc);
 
-	ArtistVo getArtistByMelon(Document doc);
-
-	void insertSong(String songId);
-
-	SongVo selectOneSongById(String songId);
-
-	int insertSongRank(List<SongRankVo> songs);
-
-	List<SongRankVo> selectAllSongRankByDate(String now);
+	ArtistEntity getArtistByMelon(Document doc);
 
 	SongEntity addSong(String songId);
 
+	int addRank(List<RankEntity> ranks);
 }

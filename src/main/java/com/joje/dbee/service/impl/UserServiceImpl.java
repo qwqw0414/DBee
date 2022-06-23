@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.joje.dbee.common.contents.RoleType;
 import com.joje.dbee.entity.account.RoleEntity;
 import com.joje.dbee.entity.account.UserEntity;
 import com.joje.dbee.repository.RoleRepository;
@@ -41,9 +42,8 @@ public class UserServiceImpl implements UserService{
 		
 //		롤 세팅
 		RoleEntity role = new RoleEntity();
-		List<RoleEntity> roles = roleRepository.findByRoleName("ROLE_USER");
 		
-		role.setRoleId(roles.get(0).getRoleId());
+		role.setRoleId(RoleType.ROLE_USER.getRoleId());
 		user.getRoles().add(role);
 		
 		return userRepository.save(user);

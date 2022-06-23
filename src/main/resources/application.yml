@@ -30,6 +30,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+    properties:
+      show_sql: true
+      format_sql: true
       
 # Batch
   batch:

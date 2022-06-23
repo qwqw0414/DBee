@@ -1,14 +1,15 @@
 package com.joje.dbee.schedule;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.joje.dbee.entity.hipword.RankEntity;
 import com.joje.dbee.service.HipwordService;
-import com.joje.dbee.vo.hipword.SongRankVo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,13 +26,13 @@ public class HipwordSchedule {
 	public void songRankUpdateSchedule() {
 		log.info("Start Schedule");
 
-		List<SongRankVo> songs = hipwordService.getChartListToMelon();
+		List<RankEntity> ranks = hipwordService.getChartListToMelon();
 
-		if (songs != null && songs.size() > 0)
-			for (SongRankVo vo : songs)
-				hipwordService.insertSong(vo.getSongId());
-
-		hipwordService.insertSongRank(songs);
+		if (ranks != null && ranks.size() > 0)
+			for (RankEntity vo : ranks)
+				hipwordService.addSong(vo.getSong().getSongId());
+		
+		hipwordService.addRank(ranks);
 
 		log.info("End Schedule");
 	}

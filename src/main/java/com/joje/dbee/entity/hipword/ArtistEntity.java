@@ -1,20 +1,19 @@
 package com.joje.dbee.entity.hipword;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @Entity(name = "TB_HIPWORD_ARTIST")
-@EqualsAndHashCode
-public class ArtistEntity {
+public class ArtistEntity implements Serializable {
+
+	private static final long serialVersionUID = 8856968316411794453L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,5 +21,8 @@ public class ArtistEntity {
 	
 	private String artistId;
 	private String artistName;
+	
+//	@OneToMany(mappedBy = "artist")
+//	private List<SongEntity> songs;
 	
 }
