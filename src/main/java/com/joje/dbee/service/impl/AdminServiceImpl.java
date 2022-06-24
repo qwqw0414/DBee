@@ -5,13 +5,21 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.joje.dbee.common.contents.RoleType;
 import com.joje.dbee.dao.UserDao;
+import com.joje.dbee.dto.account.RoleDto;
+import com.joje.dbee.dto.account.UserDto;
+import com.joje.dbee.entity.account.RoleEntity;
 import com.joje.dbee.entity.account.UserEntity;
+import com.joje.dbee.entity.account.UserRoleEntity;
+import com.joje.dbee.entity.account.UserRoleKey;
 import com.joje.dbee.repository.account.RoleRepository;
 import com.joje.dbee.repository.account.UserRepository;
+import com.joje.dbee.repository.account.UserRoleRepository;
 import com.joje.dbee.service.AdminService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service(value = "AdminService")
 public class AdminServiceImpl implements AdminService {
 
-	private static final String ROLE_ROOT = "ROLE_ROOT";
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Autowired
 	private UserDao userDao;
@@ -29,8 +38,8 @@ public class AdminServiceImpl implements AdminService {
 	private UserRepository userRepository;
 
 	@Autowired
-	private RoleRepository roleRepository;
-
+	private UserRoleRepository userRoleRepository;
+	
 	@Override
 	@Transactional
 	public int countUserByKeyword(Map<String, Object> param) throws RuntimeException {
@@ -44,47 +53,45 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Map<String, Object> getUserInfo(long userNo) throws RuntimeException {
-		return userDao.selectOneUserByNo(userNo);
+	public UserDto getUserInfo(long userNo) throws RuntimeException {
+		
+		UserEntity user = userRepository.findByUserNo(userNo);
+		
+		UserDto result = new UserDto();
+		modelMapper.map(user, result);
+		
+		return result;
 	}
 
 	@Override
 	@Transactional
 	@SuppressWarnings("unchecked")
-	public int updateUserDetail(Map<String, Object> param) throws RuntimeException {
-		int result = 0;
-		long userNo = (long) param.get("userNo");
+	public void updateUserDetail(UserDto userDto) throws RuntimeException {
+		long userNo = userDto.getUserNo();
 
-//		기존 유저 정보 조회
-		UserEntity user = userRepository.findById(userNo).get();
-
-//		이름 변경
-		String newUserName = (String) param.get("userName");
-		String oldUserName = user.getUserName();
-
-//		기존 데이터와 다를 경우
-		if (!oldUserName.equals(newUserName)) {
-			user.setUserName(newUserName);
-			userRepository.save(user);
-		}
+		UserEntity userEntity = userRepository.findByUserNo(userDto.getUserNo());
+		userEntity.setUserId(userDto.getUserId());
+		userEntity.setUserName(userDto.getUserName());
+		
+		userEntity = userRepository.save(userEntity);
 
 //		권한 정보 수정
-		List<Map<String, Object>> hasRoles = userDao.selectRoleByUserNo(userNo);
-		List<String> updateRoles = (List<String>) param.get("roles");
+		List<RoleEntity> hasRoles = userEntity.getRoles();
+		List<RoleDto> updateRoles = userDto.getRoles();
 
-//		log.debug("[hasRoles]=[{}]", hasRoles);
-//		log.debug("[updateRoles]=[{}]", updateRoles);
+		log.debug("[hasRoles]=[{}]", hasRoles);
+		log.debug("[updateRoles]=[{}]", updateRoles);
 
 //		권한 부여
-		for (String role : updateRoles) {
+		for (RoleDto role : updateRoles) {
 			boolean isDuplicate = false;
-			int updateRoleId = Integer.parseInt(role);
+			long updateRoleId = role.getRoleId();
 			int i = 0;
 
 //			업데이트된 권한 아이디와 기존 보유하고 있는 아이디 중복 검사
 			for (i = 0; i < hasRoles.size(); i++) {
 //				log.debug("[roleId]=[{}]", hasRoles.get(i).get("roleId"));
-				int hasRoleId = (int) hasRoles.get(i).get("roleId");
+				long hasRoleId = hasRoles.get(i).getRoleId();
 				isDuplicate = hasRoleId == updateRoleId;
 				if (isDuplicate)
 					break;
@@ -92,28 +99,32 @@ public class AdminServiceImpl implements AdminService {
 
 //			보유하고 있지 않다면 권한 부여
 			if (!isDuplicate) {
-				param.put("roleId", updateRoleId);
-				result = userDao.insertUserRole(param);
-				if (result != 0) {
-					log.info("Grant ROLE : [ID]=[{}] [ROLE]=[{}]", user.getUserId(), updateRoleId);
-				}
+				UserRoleKey key = new UserRoleKey();
+				key.setRoleId(updateRoleId);
+				key.setUserNo(userNo);
+				
+				UserRoleEntity userRoleEntity = new UserRoleEntity();
+				userRoleEntity.setUserRoleId(key);
+				
+				userRoleRepository.save(userRoleEntity);
+				log.info("Grant ROLE : [ID]=[{}] [ROLE]=[{}]", userEntity.getUserId(), updateRoleId);
 			}
 		}
 
 //		권한 제거
 		for (int i = 0; i < hasRoles.size(); i++) {
 			boolean isDuplicate = false;
-			int hasRoleId = (int) hasRoles.get(i).get("roleId");
+			long hasRoleId = hasRoles.get(i).getRoleId();
 
 //			업데이트된 권한 아이디와 기존 보유하고 있는 아이디 중복 검사
-			for (String role : updateRoles) {
+			for (RoleDto role : updateRoles) {
 //				루트 권한 제외
-				if (ROLE_ROOT.equals(hasRoles.get(i).get("roleName"))) {
+				if (RoleType.ROLE_ROOT.equals(hasRoles.get(i).getRoleName())) {
 					isDuplicate = true;
 					break;
 				}
 
-				int updateRoleId = Integer.parseInt(role);
+				long updateRoleId = role.getRoleId();
 				isDuplicate = hasRoleId == updateRoleId;
 				if (isDuplicate) {
 					break;
@@ -122,15 +133,16 @@ public class AdminServiceImpl implements AdminService {
 
 //			중복되지 않을 시 권한 제거
 			if (!isDuplicate) {
-				param.put("roleId", hasRoleId);
-				result = userDao.deleteUserRole(param);
-				if (result != 0) {
-					log.info("REVOKE ROLE : [ID]=[{}] [ROLE]=[{}]", user.getUserId(), hasRoleId);
-				}
+				UserRoleKey key = new UserRoleKey();
+				key.setRoleId(hasRoleId);
+				key.setUserNo(userNo);
+				
+				UserRoleEntity userRoleEntity = new UserRoleEntity();
+				userRoleEntity.setUserRoleId(key);
+				userRoleRepository.delete(userRoleEntity);
+				log.info("REVOKE ROLE : [ID]=[{}] [ROLE]=[{}]", userEntity.getUserId(), hasRoleId);
 			}
 		}
-
-		return result;
 	}
 
 }

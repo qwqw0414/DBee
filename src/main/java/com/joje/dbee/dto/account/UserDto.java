@@ -1,6 +1,5 @@
 package com.joje.dbee.dto.account;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +13,6 @@ public class UserDto {
 	private Long userNo;
 	private String userId;
 	private String userName;
-	private LocalDateTime regDate;
+	private String regDate;
 	List<RoleDto> roles;
 }

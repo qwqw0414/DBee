@@ -123,7 +123,7 @@ function updateUserDetail($modal) {
     for (var i = 0; i < $roles.length; i++) {
         let id = $roles.eq(i).attr("id");
         if ($("#" + id).prop('checked')) {
-            roles.push($("#" + id).val());
+            roles.push((String)($("#" + id).val()));
         }
     }
 

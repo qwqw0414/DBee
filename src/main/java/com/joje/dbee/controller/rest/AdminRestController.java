@@ -1,5 +1,6 @@
 package com.joje.dbee.controller.rest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.joje.dbee.common.contents.StatusCode;
+import com.joje.dbee.common.utils.ParamUtil;
+import com.joje.dbee.dto.account.RoleDto;
+import com.joje.dbee.dto.account.UserDto;
 import com.joje.dbee.service.AdminService;
 import com.joje.dbee.vo.ResultVo;
 import com.joje.dbee.vo.common.PaginationVo;
@@ -44,7 +48,7 @@ public class AdminRestController {
 	@GetMapping(value = "/account/{userNo}", produces = "application/json; charset=utf8")
 	public ResponseEntity<?> getUserInfo(@PathVariable(value = "userNo") long userNo) throws Exception {
 		
-		Map<String, Object> user = adminService.getUserInfo(userNo);
+		UserDto user = adminService.getUserInfo(userNo);
 		
 		ResultVo resultVo = new ResultVo();
 		resultVo.setStatus(StatusCode.SUCCESS);
@@ -64,21 +68,26 @@ public class AdminRestController {
 	public ResponseEntity<?> userDetailUpdate(@RequestBody Map<String, Object> body) throws Exception {
 		log.debug("[body]=[{}]", body);
 		
-//		파라미터 변환
-		long userNo = Long.parseLong((String)body.get("userNo"));
-		String userName = (String)body.get("userName");
-		List<String> roles = (List<String>)body.get("roles");
-		
 //		파라미터 Set
-		Map<String, Object> param = new HashMap<>();
-		param.put("userNo", userNo);
-		param.put("userName", userName);
-		param.put("roles", roles);
+		UserDto userDto = new UserDto();
+		userDto.setUserNo(ParamUtil.toLong(body, "userNo"));
+		userDto.setUserId(ParamUtil.toStr(body, "userId"));
+		userDto.setUserName(ParamUtil.toStr(body, "userName"));
 		
-		log.debug("[param]=[{}]", param);
+		List<Object> roleIdList = (List<Object>) ParamUtil.toList(body, "roles");
+		List<RoleDto> roles = new ArrayList<>();
+		for(int i = 0; i < roleIdList.size(); i++) {
+			String obj = String.valueOf(roleIdList.get(i)).replace(".0", "");
+			log.debug(obj);
+			roles.add(new RoleDto(ParamUtil.toLong(obj), null));
+		}
+			
+		userDto.setRoles(roles);
+		
+		log.debug("[param]=[{}]", userDto);
 
 //		사용자 정보 업데이트(결과처리 추가 필요)
-		int result = adminService.updateUserDetail(param);
+		adminService.updateUserDetail(userDto);
 		
 //		Result Set
 		ResultVo resultVo = new ResultVo();

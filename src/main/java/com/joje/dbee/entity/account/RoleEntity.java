@@ -30,8 +30,8 @@ public class RoleEntity {
 	@Enumerated(EnumType.STRING)
 	private RoleType roleName;
 	
-	@JsonIgnore
-	@ManyToMany(mappedBy = "roles")
-	private List<UserEntity> users;
+//	@JsonIgnore
+//	@ManyToMany(mappedBy = "roles")
+//	private List<UserEntity> users;
 	
 }
