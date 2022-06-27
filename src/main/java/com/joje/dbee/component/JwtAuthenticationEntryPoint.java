@@ -17,10 +17,17 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	
 	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException authException) throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		
+	public void commence(HttpServletRequest request, 
+						 HttpServletResponse response, 
+						 AuthenticationException authException) throws IOException, ServletException {
+
+        log.error("Responding with unauthorized error. Message - {}", authException.getMessage());
+
+//        ErrorCode unAuthorizationCode = (ErrorCode) request.getAttribute("unauthorization.code");
+
+//        request.setAttribute("response.failure.code", unAuthorizationCode.name());
+        request.setAttribute("response.failure.code", "errorName");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "errorMessage");
 	}
 
 }

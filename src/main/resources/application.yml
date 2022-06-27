@@ -20,12 +20,6 @@ spring:
   freemarker:
     cache: false
     
-# Thymeleaf
-  thymeleaf:
-    enabled: true
-    cache: false  # 운영시 true
-    encoding: UTF-8
-    
 # JPA
   jpa:
     hibernate:

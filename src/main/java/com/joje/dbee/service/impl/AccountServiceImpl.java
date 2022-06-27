@@ -17,7 +17,7 @@ public class AccountServiceImpl implements AccountService {
 	
 	@Override
 	public Optional<UserEntity> findByIdPw(String userId) {
-		return Optional.of(userRepository.findByUserId(userId));
+		return Optional.ofNullable(userRepository.findByUserId(userId));
 	}
 	
 }
