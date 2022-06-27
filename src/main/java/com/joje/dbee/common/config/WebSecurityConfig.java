@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.joje.dbee.component.JwtAuthenticationEntryPoint;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true)
@@ -27,6 +29,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 	
+	@Autowired
+	private JwtAuthenticationEntryPoint unauthorizedHandler;
 	@Override
 	public void configure(WebSecurity web) {
 //		web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
