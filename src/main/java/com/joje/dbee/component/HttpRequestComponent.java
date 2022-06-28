@@ -10,7 +10,6 @@ import com.joje.dbee.exception.HttpRequestException;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Component(value = "HttpRequestComponent")
 public class HttpRequestComponent {
 	public Document requestHtml(String url) {

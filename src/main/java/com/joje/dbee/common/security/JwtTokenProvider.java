@@ -35,9 +35,6 @@ public class JwtTokenProvider implements InitializingBean{
 	private final long tokenValidityInMilliseconds;
 
 	private Key key;
-	
-	// 토큰 유효시간
-	private static final int JWT_EXPIRATION_MS = 604800000;
 
     public JwtTokenProvider(
             @Value("${jwt.secret}") String secret,
@@ -55,35 +52,35 @@ public class JwtTokenProvider implements InitializingBean{
 
     // Authentication 객체의 권한정보를 이용해서 토큰을 생성하는 createToken 메소드 추가
     public String createToken(Authentication authentication) {
-        // 권한들
-        String authorities = authentication.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
+//         권한들
+	    String authorities = authentication.getAuthorities()
+	            						   .stream()
+	            						   .map(GrantedAuthority::getAuthority)
+	            						   .collect(Collectors.joining(","));
+//        유효 기간
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.tokenValidityInMilliseconds);
 
         return Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(validity)
-                .compact();
+        		   .setSubject(authentication.getName())
+        		   .claim(AUTHORITIES_KEY, authorities)
+        		   .signWith(key, SignatureAlgorithm.HS512)
+        		   .setExpiration(validity)
+        		   .compact();
     }
 
  // token에 담겨있는 정보를 이용해 Authentication 객체를 리턴하는 메소드 생성
     public Authentication getAuthentication(String token) {
         // token을 활용하여 Claims 생성
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+                			.setSigningKey(key)
+                			.build()
+                			.parseClaimsJws(token)
+                			.getBody();
 
         List<SimpleGrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+                										 .map(SimpleGrantedAuthority::new)
+                										 .collect(Collectors.toList());
 
         // claims과 authorities 정보를 활용해 User (org.springframework.security.core.userdetails.User) 객체 생성
         User principal = new User(claims.getSubject(), "", authorities);

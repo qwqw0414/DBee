@@ -1,5 +1,7 @@
 package com.joje.dbee.common.advice;
 
+import java.nio.file.AccessDeniedException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,26 +27,30 @@ public class CustomErrorAdvice {
 
 	private Gson gson = new Gson();
 	
-	@ResponseBody
-	@ExceptionHandler(DBeeException.class)
-	public ResponseEntity<?> dbeeException(DBeeException e) {
-
-//		결과 셋
-		ResultVo resultVo = new ResultVo(e.getStatus());
-		resultVo.put("message", e.getStatus().getMessage());
-		log.info("[resultVo]=[{}]", resultVo);
-		log.error(e.getMessage());
-
-//		헤더 설정
-		HttpHeaders resHeaders = new HttpHeaders();
+	private static HttpHeaders resHeaders;
+	
+	public CustomErrorAdvice() {
+		resHeaders = new HttpHeaders();
 		resHeaders.add("Content-Type", "application/json;charset=UTF-8");
+	}
+	
+	@ResponseBody
+	@ExceptionHandler(value = {DBeeException.class})
+	public ResponseEntity<ResultVo> dbeeException(DBeeException e) {
 
-		return new ResponseEntity<>(gson.toJson(resultVo), resHeaders, HttpStatus.OK);
+		log.error(e.getMessage());
+		
+//		결과 셋
+		ResultVo resultVo = new ResultVo(StatusCode.FAILED_INVALID);
+//		resultVo.put("message", e.getStatus().getMessage());
+//		log.info("[resultVo]=[{}]", resultVo);
+
+		return new ResponseEntity<>(resultVo, resHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ResponseBody
 	@ExceptionHandler(HttpRequestException.class)
-	public ResponseEntity<?> httpRequestException(HttpRequestException e) {
+	public ResponseEntity<ResultVo> httpRequestException(HttpRequestException e) {
 
 //		결과 셋
 		ResultVo resultVo = new ResultVo(StatusCode.FAILED_CONNECT);
@@ -52,11 +58,7 @@ public class CustomErrorAdvice {
 		log.info("[resultVo]=[{}]", resultVo);
 		log.error(e.getMessage());
 
-//		헤더 설정
-		HttpHeaders resHeaders = new HttpHeaders();
-		resHeaders.add("Content-Type", "application/json;charset=UTF-8");
-
-		return new ResponseEntity<>(gson.toJson(resultVo), resHeaders, HttpStatus.OK);
+		return new ResponseEntity<>(resultVo, resHeaders, HttpStatus.OK);
 	}
 
 	/**
@@ -71,15 +73,23 @@ public class CustomErrorAdvice {
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	
+	@ResponseBody
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<?> accessDeniedException(AccessDeniedException e) {
+		log.error(e.getMessage());
+		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+	}
+	
+	@ResponseBody
 	@ExceptionHandler(RuntimeException.class)
-	public String runtimeException(RuntimeException e, HttpServletRequest request, HttpServletResponse response) {
+	public ResponseEntity<?> runtimeException(RuntimeException e, HttpServletRequest request, HttpServletResponse response) {
 
 		log.error("runtimeException : {}", e.getMessage());
 		
 		e.printStackTrace();
 		request.setAttribute("errorCode", "500");
 		request.setAttribute("errorMessage", StatusCode.INTERNAL_SERVER_ERROR.getMessage());
-		return "error/error";
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 }

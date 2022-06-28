@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.joje.dbee.common.security.JwtTokenProvider;
 import com.joje.dbee.dto.account.TokenResponseDto;
 import com.joje.dbee.dto.account.UserDto;
+import com.joje.dbee.dto.account.UserLoginDto;
 import com.joje.dbee.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,11 +24,11 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 	
     @Override
-	public TokenResponseDto login(UserDto loginDto) {
+	public TokenResponseDto login(UserLoginDto UserLoginDto) {
 
         // username, password를 파라미터로 받고 이를 이용해 UsernamePasswordAuthenticationToken을 생성
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getUserId(), loginDto.getPassword());
+                new UsernamePasswordAuthenticationToken(UserLoginDto.getUserId(), UserLoginDto.getPassword());
 
         // authenticationToken을 이용해서 Authenticaiton 객체를 생성하려고 authenticate 메소드가 실행될 때
         // CustomUserDetailsService에서 override한 loadUserByUsername 메소드가 실행된다.

@@ -175,6 +175,7 @@ public class ParamUtil {
 //	#############################################################################################
 //												List
 //	#############################################################################################
+	@SuppressWarnings("unchecked")
 	public static List<Object> toList(Object param) throws BadRequestException {
 		try {
 			if (param != null) {

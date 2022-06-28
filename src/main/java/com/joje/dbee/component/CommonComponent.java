@@ -4,8 +4,19 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-@Component(value = "ModelMapperComponent")
-public class ModelMapperComponent {
+import com.google.gson.Gson;
+
+/**
+ * 공통 모듈
+ *
+ */
+@Component
+public class CommonComponent {
+
+	@Bean
+	public Gson gson() {
+		return new Gson();
+	}
 	
 	@Bean
 	public ModelMapper modelMapper() {

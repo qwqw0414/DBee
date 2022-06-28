@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-//@EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true)
+@EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true) // 어노테이션을 이용한 접근 제한 허용
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -60,73 +61,37 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //  시큐리티 설정
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-//		http
-//			.authorizeRequests()
-//				.antMatchers("/dbee/user/**").hasRole("USER")
-//				.antMatchers("/dbee/admin/**").hasRole("ADMIN")
-//				.anyRequest().permitAll()
-//				.and()
-//			.formLogin()
-//				.loginPage("/dbee/account/login")
-//				.defaultSuccessUrl("/dbee")
-//				.permitAll()
-//				.and()
-//			.logout()
-//				.logoutRequestMatcher(new AntPathRequestMatcher("/dbee/account/logout"))
-//				.logoutSuccessUrl("/dbee/account/login")
-//				.permitAll();
-//				.and()
-//			.csrf().disable();
-
 		 http
-         // token을 사용하는 방식이기 때문에 csrf를 disable
+//          token을 사용하는 방식이기 때문에 csrf를 disable
          	.csrf().disable()
 
-         // Exception을 핸들링할 때 직접 만든 클래스를 추가
+//          Exception을 핸들링할 때 직접 만든 클래스를 추가
          	.exceptionHandling()
          	.authenticationEntryPoint(jwtAuthenticationEntryPoint)
          	.accessDeniedHandler(jwtAccessDeniedHandler)
 
-         // enable h2-console
-//         	.and()
-//         	.headers()
-//         	.frameOptions()
-//         	.sameOrigin()
-
-         // 세션을 사용하지 않기 때문에 STATELESS로 설정
+//          세션을 사용하지 않기 때문에 STATELESS로 설정
          	.and()
          	.sessionManagement()
          	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
+//         	권한 설정
          	.and()
          	.authorizeRequests() // HttpServletRequest를 사용하는 요청들에 대한 접근제한을 설정
-         	.antMatchers("/dbee/account/login").permitAll()
-         	.antMatchers("/dbee/account/signup").permitAll()
+         	.antMatchers("/dbee/user/**").hasRole("USER")
+         	.antMatchers("/dbee/admin/**").hasRole("ADMIN")
+         	.antMatchers("/dbee/root/**").hasRole("ROOT")
+         	.anyRequest().permitAll() // 나머지는 접근 허용
 
-         	.anyRequest().authenticated() // 나머지는 인증 필요
-
-         // JwtSecurityConfig 클래스 적용
-         .and()
-         .apply(jwtSecurityConfig);
-			
-		
+//          JwtSecurityConfig 클래스 적용
+         	.and()
+         	.apply(jwtSecurityConfig);
 	}
 	
-//	시큐리티 디비 쿼리
-//	@Autowired
-//	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//	    auth.jdbcAuthentication()
-//	      .dataSource(dataSource)
-//	      .passwordEncoder(passwordEncoder())
-//	      .usersByUsernameQuery("select user_id, password, enabled "
-//	    		  			  + "from tb_user "
-//	    		  			  + "where user_id = ?")
-//	      .authoritiesByUsernameQuery("select u.user_id, r.role_name "
-//	    		  					+ "from tb_user_role ur inner join tb_user u on ur.user_no = u.user_no "
-//	    		  					+ "inner join tb_role r on ur.role_id = r.role_id "
-//	    		  					+ "where u.user_id = ?");
-//	}
-	
+	/**
+	 * Cors 설정
+	 * @return
+	 */
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();

@@ -18,7 +18,7 @@ public class StringUtil {
 		return true;
 	}
 	
-	public static String toStr(List<String> list, String dot) {
+	public static String join(List<String> list, String dot) {
 		String result = "";
 		for (int i = 0; i < list.size(); i++)
 			result += (i + 1) == list.size() ? list.get(i) : list.get(i) + dot;

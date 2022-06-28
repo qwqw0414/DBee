@@ -1,16 +1,17 @@
 package com.joje.dbee.service;
 
 
-import com.joje.dbee.dto.account.TokenResponseDto;
 import com.joje.dbee.dto.account.UserDto;
+import com.joje.dbee.dto.account.UserRegistDto;
 
 public interface AccountService {
 
-	UserDto signup(UserDto userDto);
+	UserDto signup(UserRegistDto userRegistDto) throws RuntimeException;
 
 	UserDto findByUserId(String userId);
 
-	TokenResponseDto login(UserDto userDto);
+	int userIdDuplicateCheck(String userId);
 
+	UserDto findUserInfo();
 	
 }

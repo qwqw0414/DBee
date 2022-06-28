@@ -166,7 +166,7 @@ public class HipwordServiceImpl implements HipwordService {
 			song.setSongId(songId);;
 			song.setSongTitle(this.getSongTitleByMelon(doc));
 			song.setArtist(artist);
-			song.setLyrics(StringUtil.toStr(this.getLyricsToMelon(doc), "\n"));
+			song.setLyrics(StringUtil.join(this.getLyricsToMelon(doc), "\n"));
 			
 			songEntity = songRepository.save(song);
 		} else {

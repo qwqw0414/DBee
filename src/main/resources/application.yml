@@ -46,11 +46,11 @@ file:
   uplad-dir: ./upload
 
 # Mybatis
-mybatis:
-  type-aliases-package: com.joje.dbee.vo.**
-  mapper-locations: mappers/**/*.xml
-  configuration:
-    map-underscore-to-camel-case: true
+#mybatis:
+#  type-aliases-package: com.joje.dbee.vo.**
+#  mapper-locations: mappers/**/*.xml
+#  configuration:
+#    map-underscore-to-camel-case: true
 
 # Logging
 logging:

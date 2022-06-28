@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 서비스 흐름을 로깅하기 위한 AOP
+ *
+ */
 @Slf4j
 @Aspect
 @Component
@@ -16,8 +20,8 @@ public class LoggerAspect {
 
 	private static final int FILTER_SIZE = "com.joje.dbee.".length();
 
-	@Pointcut("execution(* com.joje.dbee..*.*(..)) && !execution(* com.joje.dbee.common..*.*(..))")
-//	@Pointcut("execution(* com.joje.dbee..*.*(..))")
+//	@Pointcut("execution(* com.joje.dbee..*.*(..)) && !execution(* com.joje.dbee.common..*.*(..))")
+	@Pointcut("execution(* com.joje.dbee..*.*(..))")
 	public void pointcut() {
 	}
 
