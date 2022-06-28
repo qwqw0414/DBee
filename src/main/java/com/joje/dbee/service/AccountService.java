@@ -1,11 +1,16 @@
 package com.joje.dbee.service;
 
-import java.util.Optional;
 
-import com.joje.dbee.entity.account.UserEntity;
+import com.joje.dbee.dto.account.TokenResponseDto;
+import com.joje.dbee.dto.account.UserDto;
 
 public interface AccountService {
 
-	Optional<UserEntity> findByIdPw(String userId);
+	UserDto signup(UserDto userDto);
 
+	UserDto findByUserId(String userId);
+
+	TokenResponseDto login(UserDto userDto);
+
+	
 }

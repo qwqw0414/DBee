@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,14 +17,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.joje.dbee.common.filter.JwtAuthenticationFilter;
-import com.joje.dbee.component.JwtAuthenticationEntryPoint;
+import com.joje.dbee.common.security.JwtAccessDeniedHandler;
+import com.joje.dbee.common.security.JwtAuthenticationEntryPoint;
 import com.joje.dbee.repository.account.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -37,20 +33,13 @@ import lombok.RequiredArgsConstructor;
 //@EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Autowired
-	private JwtAuthenticationEntryPoint unauthorizedHandler;
-	
-	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private CorsConfig corsConfig;
-	
+	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+	private final JwtSecurityConfig jwtSecurityConfig;
 	
 	@Override
 	public void configure(WebSecurity web) {
-//		web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-		web.ignoring().antMatchers("/assets/**");
+		web.ignoring().antMatchers("/assets/**", "/favicon.ico");
 	}
 	
 //	 권한 계층 구조 설정
@@ -88,37 +77,39 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //				.permitAll();
 //				.and()
 //			.csrf().disable();
-//        http
-//	        .cors()
-//	        .and()
-//	        .csrf()
-//	        .disable()
-//	        .exceptionHandling()
-//	        .authenticationEntryPoint(unauthorizedHandler)
-//	        .and()
-//	        .sessionManagement()
-//	        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//	        .and()
-//	        .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-//	        .authorizeRequests()
-//	        .antMatchers("/dbee/auth/**")
-//	        .permitAll()
-//	        .antMatchers("/**")
-//	        .authenticated();
+
+		 http
+         // token을 사용하는 방식이기 때문에 csrf를 disable
+         	.csrf().disable()
+
+         // Exception을 핸들링할 때 직접 만든 클래스를 추가
+         	.exceptionHandling()
+         	.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+         	.accessDeniedHandler(jwtAccessDeniedHandler)
+
+         // enable h2-console
+//         	.and()
+//         	.headers()
+//         	.frameOptions()
+//         	.sameOrigin()
+
+         // 세션을 사용하지 않기 때문에 STATELESS로 설정
+         	.and()
+         	.sessionManagement()
+         	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+         	.and()
+         	.authorizeRequests() // HttpServletRequest를 사용하는 요청들에 대한 접근제한을 설정
+         	.antMatchers("/dbee/account/login").permitAll()
+         	.antMatchers("/dbee/account/signup").permitAll()
+
+         	.anyRequest().authenticated() // 나머지는 인증 필요
+
+         // JwtSecurityConfig 클래스 적용
+         .and()
+         .apply(jwtSecurityConfig);
+			
 		
-    http
-        .addFilter(corsConfig.corsFilter())
-        .csrf().disable()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    .and()
-        .formLogin().disable()
-        .httpBasic().disable()
-        .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-        .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository))
-        .authorizeRequests()
-	        .antMatchers("/**")
-	        .access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-	        .anyRequest().permitAll();
 	}
 	
 //	시큐리티 디비 쿼리

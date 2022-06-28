@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	@Transactional
 	public UserEntity findUserById(String userId) throws RuntimeException {
-		return userRepository.findByUserId(userId);
+		return userRepository.findByUserId(userId).get();
 	}
 
 	/**

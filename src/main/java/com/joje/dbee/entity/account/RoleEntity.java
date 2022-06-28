@@ -30,6 +30,11 @@ public class RoleEntity {
 	@Enumerated(EnumType.STRING)
 	private RoleType roleName;
 	
+	public RoleEntity(RoleType role) {
+		this.roleId = role.getRoleId();
+		this.roleName = role;
+	}
+	
 //	@JsonIgnore
 //	@ManyToMany(mappedBy = "roles")
 //	private List<UserEntity> users;

@@ -64,7 +64,7 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authList = new ArrayList<>();
-        authList.add(new SimpleGrantedAuthority();
+//        authList.add(new SimpleGrantedAuthority());
         return authList;
     }
 	
