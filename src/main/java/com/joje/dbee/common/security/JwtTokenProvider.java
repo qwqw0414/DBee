@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 
 import com.joje.dbee.common.contents.StatusCode;
 import com.joje.dbee.exception.DBeeException;
+import com.joje.dbee.exception.UnauthorizedException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -102,18 +103,27 @@ public class JwtTokenProvider implements InitializingBean{
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 			return true;
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-			log.info("잘못된 JWT 서명입니다.");
+			throw new UnauthorizedException("잘못된 JWT 서명입니다.");
 		} catch (ExpiredJwtException e) {
-			throw new DBeeException(StatusCode.JWT_EXPIRED, "만료된 JWT 토큰입니다.");
+			throw new UnauthorizedException("만료된 JWT 토큰입니다.");
 		} catch (UnsupportedJwtException e) {
-			log.info("지원되지 않는 JWT 토큰입니다.");
+			throw new UnauthorizedException("지원되지 않는 JWT 토큰입니다.");
 		} catch (IllegalArgumentException e) {
-			log.info("JWT 토큰이 잘못되었습니다.");
+			throw new UnauthorizedException("JWT 토큰이 잘못되었습니다.");
 		}
-		return false;
 	}
 	
-    public Object getUserId(HttpServletRequest request) {
+	public long getUserNo(HttpServletRequest request) {
+    	String header = request.getHeader(AUTHORIZATION_HEADER);
+    	if(header != null) {
+    		String token = header.substring(7);
+    		this.validateToken(token);
+    		return Long.parseLong(this.getAuthentication(token).getName());
+    	}
+    	throw new DBeeException("헤더에 JWT 정보가 없습니다.");
+	}
+	
+    public String getUserId(HttpServletRequest request) {
     	String header = request.getHeader(AUTHORIZATION_HEADER);
     	if(header != null) {
     		String token = header.substring(7);

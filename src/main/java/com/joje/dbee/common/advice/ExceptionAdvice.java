@@ -18,6 +18,7 @@ import com.joje.dbee.common.contents.StatusCode;
 import com.joje.dbee.exception.BadRequestException;
 import com.joje.dbee.exception.DBeeException;
 import com.joje.dbee.exception.HttpRequestException;
+import com.joje.dbee.exception.UnauthorizedException;
 import com.joje.dbee.vo.ResultVo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,9 @@ public class ExceptionAdvice {
 		header.add("Content-Type", "application/json;charset=UTF-8");
 	}
 
+	/**
+	 * 공통 에러
+	 */
 	@ExceptionHandler(value = { DBeeException.class })
 	public ResponseEntity<ResultVo> dbeeException(DBeeException e) {
 		log.error(e.getMessage());
@@ -47,6 +51,9 @@ public class ExceptionAdvice {
 		return new ResponseEntity<>(resultVo, header, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	/**
+	 * 타 서버간 http 서비스 에러
+	 */
 	@ExceptionHandler(value = { HttpRequestException.class })
 	public ResponseEntity<ResultVo> httpRequestException(HttpRequestException e) {
 		log.error(e.getMessage());
@@ -57,6 +64,9 @@ public class ExceptionAdvice {
 		return new ResponseEntity<>(resultVo, header, HttpStatus.OK);
 	}
 
+	/**
+	 * 잘못 된 요청 
+	 */
 	@ExceptionHandler(value = { BadRequestException.class })
 	public ResponseEntity<ResultVo> badRequestException(BadRequestException e) {
 		log.error(e.getMessage());
@@ -66,7 +76,10 @@ public class ExceptionAdvice {
 
 		return new ResponseEntity<>(resultVo, header, HttpStatus.BAD_REQUEST);
 	}
-
+	
+	/**
+	 * 요청 파라미터 유효성 검증 실패
+	 */
 	@ExceptionHandler(value = { MethodArgumentNotValidException.class })
 	public ResponseEntity<ResultVo> methodArgumentNotValidExceptionException(MethodArgumentNotValidException e) {
 		log.error(e.getMessage());
@@ -75,7 +88,22 @@ public class ExceptionAdvice {
 
 		return new ResponseEntity<>(resultVo, header, HttpStatus.BAD_REQUEST);
 	}
+	
+	/**
+	 * 자격 증명 실패
+	 */
+	@ExceptionHandler(value = { UnauthorizedException.class })
+	public ResponseEntity<ResultVo> unauthorizedException(UnauthorizedException e) {
+		log.error(e.getMessage());
 
+		ResultVo resultVo = new ResultVo(StatusCode.UNAUTHORIZED);
+
+		return new ResponseEntity<>(resultVo, HttpStatus.UNAUTHORIZED);
+	}
+	
+	/**
+	 * 권한 인증 실패
+	 */
 	@ExceptionHandler(value = { AccessDeniedException.class })
 	public ResponseEntity<ResultVo> accessDeniedException(AccessDeniedException e) {
 		log.error(e.getMessage());
@@ -85,6 +113,9 @@ public class ExceptionAdvice {
 		return new ResponseEntity<>(resultVo, HttpStatus.FORBIDDEN);
 	}
 
+	/**
+	 * 그 외 서버 에러
+	 */
 	@ExceptionHandler(value = { RuntimeException.class })
 	public ResponseEntity<ResultVo> runtimeException(RuntimeException e) {
 		log.error(e.getMessage());

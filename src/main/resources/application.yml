@@ -30,10 +30,10 @@ spring:
         format_sql: true
       
 # Batch
-  batch:
-    initialize-schema: never
-    job:
-      enabled: false
+#  batch:
+#    initialize-schema: never
+#    job:
+#      enabled: false
       
 # File
   servlet:

@@ -9,6 +9,7 @@ public enum StatusCode {
 	FAILED_CONNECT(203, "타 서버간 요청이 원활하지 않습니다."),
 	DUPLICATE_DATA(204, "중복된 데이터 입니다."),
 	JWT_EXPIRED(205, "만료된 JWT 토큰"),
+	UNAUTHORIZED(401, "로그인이 필요합니다."),
 	FORBIDDEN(403, "해당 요청에 권한이 없습니다."),
 	INTERNAL_SERVER_ERROR(500, "서버 에러");
 	

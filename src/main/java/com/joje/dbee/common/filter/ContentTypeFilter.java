@@ -26,9 +26,9 @@ public class ContentTypeFilter implements Filter{
 		
 		String contentType = request.getContentType();
 		
-		if (contentType == null || ! contentType.startsWith("application/json")) {
-			throw new BadRequestException("잘못 된 ContentType");
-		}
+//		if (contentType == null || ! contentType.startsWith("application/json")) {
+//			throw new BadRequestException("잘못 된 ContentType");
+//		}
 		
 		chain.doFilter(request, response);
 	}
