@@ -15,6 +15,7 @@ import com.joje.dbee.common.contents.StatusCode;
 import com.joje.dbee.common.utils.HttpUtil;
 import com.joje.dbee.common.utils.ReadableRequestWrapper;
 import com.joje.dbee.component.JsonConfigComponent;
+import com.joje.dbee.exception.BadRequestException;
 import com.joje.dbee.exception.DBeeException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -60,17 +61,17 @@ public class AccountInterceptor implements HandlerInterceptor {
 //			유효성 검증
 			if(userId != null && !Pattern.matches(REG_USER_ID, userId)) {
 //				log.debug("Invalid UserId !! [userId]=[{}]", userId);
-				throw new DBeeException(StatusCode.FAILED_INVALID);
+				throw new BadRequestException("Invalid Value : userId");
 			}
 			
 			if(userName != null && !Pattern.matches(REG_USER_NAME, userName)) {
 //				log.debug("Invalid UserName !! [userName]=[{}]", userName);
-				throw new DBeeException(StatusCode.FAILED_INVALID);
+				throw new BadRequestException("Invalid Value : userName");
 			}
 			
 			if(password != null && !Pattern.matches(REG_PASSWORD, password)) {
 //				log.debug("Invalid Password !! [password]=[{}]", password);
-				throw new DBeeException(StatusCode.FAILED_INVALID);
+				throw new BadRequestException("Invalid Value : password");
 			}
 		}
 		

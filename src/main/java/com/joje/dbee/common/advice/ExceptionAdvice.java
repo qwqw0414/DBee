@@ -26,13 +26,11 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class ExceptionAdvice {
 
-	private Gson gson = new Gson();
-	
-	private static HttpHeaders resHeaders;
+	private static HttpHeaders header;
 	
 	public ExceptionAdvice() {
-		resHeaders = new HttpHeaders();
-		resHeaders.add("Content-Type", "application/json;charset=UTF-8");
+		header = new HttpHeaders();
+		header.add("Content-Type", "application/json;charset=UTF-8");
 	}
 	
 	@ExceptionHandler(value = {DBeeException.class})
@@ -40,51 +38,52 @@ public class ExceptionAdvice {
 
 		log.error(e.getMessage());
 		
+		StatusCode statusCode = e.getStatus() == null ? StatusCode.FAILED_ERROR : e.getStatus();
+		
 //		결과 셋
-		ResultVo resultVo = new ResultVo(StatusCode.FAILED_INVALID);
-//		resultVo.put("message", e.getStatus().getMessage());
-//		log.info("[resultVo]=[{}]", resultVo);
+		ResultVo resultVo = new ResultVo(statusCode);
+		resultVo.put("message", statusCode.getMessage());
 
-		return new ResponseEntity<>(resultVo, resHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(resultVo, header, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@ExceptionHandler(HttpRequestException.class)
+	@ExceptionHandler(value = {HttpRequestException.class})
 	public ResponseEntity<ResultVo> httpRequestException(HttpRequestException e) {
 
-//		결과 셋
 		ResultVo resultVo = new ResultVo(StatusCode.FAILED_CONNECT);
 		resultVo.put("message", StatusCode.FAILED_CONNECT.getMessage());
 		log.info("[resultVo]=[{}]", resultVo);
 		log.error(e.getMessage());
 
-		return new ResponseEntity<>(resultVo, resHeaders, HttpStatus.OK);
+		return new ResponseEntity<>(resultVo, header, HttpStatus.OK);
 	}
 
-	/**
-	 * 잘못된 요청시 발생하는 에러 핸들링
-	 * @param e
-	 * @return
-	 */
-	@ExceptionHandler(BadRequestException.class)
-	public ResponseEntity<?> badRequestException(BadRequestException e) {
+	@ExceptionHandler(value = { BadRequestException.class })
+	public ResponseEntity<ResultVo> badRequestException(BadRequestException e) {
+		
+		ResultVo resultVo = new ResultVo(StatusCode.BAD_REQUEST);
+		resultVo.put("message", e.getMessage());
+		
 		log.error(e.getMessage());
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		return new ResponseEntity<>(resultVo, header, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(value = {MethodArgumentNotValidException.class})
-	public ResponseEntity<?> methodArgumentNotValidExceptionException(MethodArgumentNotValidException e) {
+	@ExceptionHandler(value = { MethodArgumentNotValidException.class })
+	public ResponseEntity<ResultVo> methodArgumentNotValidExceptionException(MethodArgumentNotValidException e) {
+		ResultVo resultVo = new ResultVo(StatusCode.BAD_REQUEST);
 		log.error(e.getMessage());
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(resultVo, header, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(AccessDeniedException.class)
-	public ResponseEntity<?> accessDeniedException(AccessDeniedException e) {
+	public ResponseEntity<ResultVo> accessDeniedException(AccessDeniedException e) {
 		log.error(e.getMessage());
 		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 	}
 	
 	@ExceptionHandler(RuntimeException.class)
-	public ResponseEntity<?> runtimeException(RuntimeException e, HttpServletRequest request, HttpServletResponse response) {
+	public ResponseEntity<ResultVo> runtimeException(RuntimeException e, HttpServletRequest request, HttpServletResponse response) {
 
 		log.error("runtimeException : {}", e.getMessage());
 		

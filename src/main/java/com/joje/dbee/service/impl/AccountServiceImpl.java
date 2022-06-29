@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.joje.dbee.common.contents.RoleType;
+import com.joje.dbee.common.contents.StatusCode;
 import com.joje.dbee.common.utils.SecurityUtil;
 import com.joje.dbee.dto.account.TokenResponseDto;
 import com.joje.dbee.dto.account.UserDto;
@@ -42,7 +43,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public UserDto signup(UserRegistDto userRegistDto) throws RuntimeException {
         if (userRepository.countByUserId(userRegistDto.getUserId()) > 0) {
-            throw new DBeeException("이미 가입된 유저입니다.");
+            throw new DBeeException(StatusCode.DUPLICATE_DATA, "이미 가입된 유저입니다.");
         }
 
 //      초기 권한

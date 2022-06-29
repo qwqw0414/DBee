@@ -16,6 +16,11 @@ public class DBeeException extends RuntimeException {
 		this.status = status;
 	}
 
+	public DBeeException(StatusCode status, String message) {
+		super(message);
+		this.status = status;
+	}
+	
 	public DBeeException(String message) {
 		super(message);
 	}

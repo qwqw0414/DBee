@@ -20,8 +20,8 @@ public class LoggerAspect {
 
 	private static final int FILTER_SIZE = "com.joje.dbee.".length();
 
-//	@Pointcut("execution(* com.joje.dbee..*.*(..)) && !execution(* com.joje.dbee.common..*.*(..))")
-	@Pointcut("execution(* com.joje.dbee..*.*(..))")
+//	@Pointcut("execution(* com.joje.dbee..*.*(..))")
+	@Pointcut("execution(* com.joje.dbee..*.*(..)) && !execution(* com.joje.dbee.common..*.*(..))")
 	public void pointcut() {
 	}
 
