@@ -13,5 +13,7 @@ public interface AccountService {
 	int userIdDuplicateCheck(String userId);
 
 	UserDto findUserInfo();
+
+	UserDto findByUserNo(long userNo);
 	
 }

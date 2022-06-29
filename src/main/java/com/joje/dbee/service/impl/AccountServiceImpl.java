@@ -58,13 +58,7 @@ public class AccountServiceImpl implements AccountService {
                 					.roles(roles)
                 					.build();
 
-//      사용자 정보 저장
-        user = userRepository.save(user);
-        
-        UserDto userDto = new UserDto();
-        modelMapper.map(user, userDto);
-        
-        return userDto;
+        return modelMapper.map(userRepository.save(user), UserDto.class);
     }
 	
     @Override
@@ -73,21 +67,24 @@ public class AccountServiceImpl implements AccountService {
     	UserEntity user = userRepository.findByUserId(userId).get();
     	log.debug("[user]=[{}]", user);
     	
-    	UserDto userDto = new UserDto();
-    	modelMapper.map(user, userDto);
+    	return modelMapper.map(user, UserDto.class);
+    }
+    
+    @Override
+    public UserDto findByUserNo(long userNo) {
     	
-    	return userDto;
+    	UserEntity user = userRepository.findByUserNo(userNo).get();
+    	log.debug("[user]=[{}]", user);
+    	
+    	return modelMapper.map(user, UserDto.class);
     }
 
     @Override
 	public UserDto findUserInfo() {
 		String userId = SecurityUtil.getCurrentId()
-				.orElseThrow(() -> new RuntimeException("Security Context에 인증 정보가 없습니다."));
+				.orElseThrow(() -> new DBeeException("Security Context에 인증 정보가 없습니다."));
 
-    	UserDto userDto = new UserDto();
-    	modelMapper.map(userRepository.findByUserId(userId), userDto);
-		
-    	return userDto;
+    	return modelMapper.map(userRepository.findByUserId(userId), UserDto.class);
 	}
 
 	@Override

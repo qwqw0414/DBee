@@ -1,7 +1,5 @@
 package com.joje.dbee.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
 import com.joje.dbee.common.filter.JwtFilter;
+import com.joje.dbee.common.security.JwtTokenProvider;
 import com.joje.dbee.dto.account.TokenResponseDto;
 import com.joje.dbee.dto.account.UserDto;
 import com.joje.dbee.dto.account.UserLoginDto;
@@ -35,20 +33,22 @@ public class AccountController {
 
 	private final AccountService accountService;
 	private final AuthService authService;
+	private final JwtTokenProvider jwtTokenProvider;
 	
 	/**
 	 * 로그인
 	 */
 	@PostMapping(value = "/login", produces = "application/json; charset=utf8")
-	public ResponseEntity<ResultVo> login(@RequestBody UserLoginDto userLoginDto) throws Exception {
+	public ResponseEntity<ResultVo> login(@Validated @RequestBody UserLoginDto userLoginDto) throws Exception {
 
 		TokenResponseDto tokenResponseDto = authService.login(userLoginDto);
 		
         // Response Header에 token 값을 넣어준다.
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenResponseDto.getToken());
+        httpHeaders.add(JwtTokenProvider.AUTHORIZATION_HEADER, "Bearer " + tokenResponseDto.getToken());
 
         ResultVo resultVo = new ResultVo();
+        resultVo.put("user", accountService.findByUserId(userLoginDto.getUserId()));
         
         return new ResponseEntity<>(resultVo, httpHeaders, HttpStatus.OK);
     }

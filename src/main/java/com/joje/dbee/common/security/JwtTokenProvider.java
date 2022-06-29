@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +16,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import com.joje.dbee.common.contents.StatusCode;
+import com.joje.dbee.exception.DBeeException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -29,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class JwtTokenProvider implements InitializingBean{
 
+	public static final String AUTHORIZATION_HEADER = "Authorization";
 	private static final String AUTHORITIES_KEY = "auth";
 	
 	private final String secret;
@@ -68,7 +75,7 @@ public class JwtTokenProvider implements InitializingBean{
         		   .setExpiration(validity)
         		   .compact();
     }
-
+    
  // token에 담겨있는 정보를 이용해 Authentication 객체를 리턴하는 메소드 생성
     public Authentication getAuthentication(String token) {
         // token을 활용하여 Claims 생성
@@ -97,7 +104,7 @@ public class JwtTokenProvider implements InitializingBean{
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 			log.info("잘못된 JWT 서명입니다.");
 		} catch (ExpiredJwtException e) {
-			log.info("만료된 JWT 토큰입니다.");
+			throw new DBeeException(StatusCode.JWT_EXPIRED, "만료된 JWT 토큰입니다.");
 		} catch (UnsupportedJwtException e) {
 			log.info("지원되지 않는 JWT 토큰입니다.");
 		} catch (IllegalArgumentException e) {
@@ -105,4 +112,14 @@ public class JwtTokenProvider implements InitializingBean{
 		}
 		return false;
 	}
+	
+    public Object getUserId(HttpServletRequest request) {
+    	String header = request.getHeader(AUTHORIZATION_HEADER);
+    	if(header != null) {
+    		String token = header.substring(7);
+    		this.validateToken(token);
+    		return this.getAuthentication(token).getName();
+    	}
+    	throw new DBeeException("헤더에 JWT 정보가 없습니다.");
+    }
 }

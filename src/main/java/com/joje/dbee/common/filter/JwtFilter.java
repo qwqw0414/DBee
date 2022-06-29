@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtFilter implements Filter{
 
-	public static final String AUTHORIZATION_HEADER = "Authorization";
+	
 
 	private final JwtTokenProvider tokenProvider;	
 	
@@ -55,7 +55,7 @@ public class JwtFilter implements Filter{
 
     // request header에서 토큰 정보를 꺼내오는 메소드
     private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        String bearerToken = request.getHeader(JwtTokenProvider.AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }

@@ -11,5 +11,5 @@ import com.joje.dbee.entity.account.UserEntity;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	public Optional<UserEntity> findByUserId(String userId);
 	public int countByUserId(String userId);
-	public UserEntity findByUserNo(long userNo);
+	public Optional<UserEntity> findByUserNo(long userId);
 }
