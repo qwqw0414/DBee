@@ -11,9 +11,9 @@ import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.joje.dbee.common.config.FileStorageProperties;
 import com.joje.dbee.exception.FileStorageException;
 import com.joje.dbee.service.FileStorageService;
 
@@ -30,8 +30,8 @@ public class FileStorageServiceImpl implements FileStorageService {
 	private final String fileStoragePath;
 
 	@Autowired
-	public FileStorageServiceImpl(FileStorageProperties fileStorageProperties) {
-		this.fileStoragePath = fileStorageProperties.getUpladDir();
+	public FileStorageServiceImpl(@Value("${file.upload-dir}") String uploadDir) {
+		this.fileStoragePath = uploadDir;
 		this.fileStorageLocation = Paths.get(FilenameUtils.getName(fileStoragePath)).toAbsolutePath().normalize();
 
 		try {

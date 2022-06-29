@@ -8,9 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.google.gson.Gson;
 import com.joje.dbee.common.contents.StatusCode;
@@ -22,19 +23,18 @@ import com.joje.dbee.vo.ResultVo;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@ControllerAdvice
-public class CustomErrorAdvice {
+@RestControllerAdvice
+public class ExceptionAdvice {
 
 	private Gson gson = new Gson();
 	
 	private static HttpHeaders resHeaders;
 	
-	public CustomErrorAdvice() {
+	public ExceptionAdvice() {
 		resHeaders = new HttpHeaders();
 		resHeaders.add("Content-Type", "application/json;charset=UTF-8");
 	}
 	
-	@ResponseBody
 	@ExceptionHandler(value = {DBeeException.class})
 	public ResponseEntity<ResultVo> dbeeException(DBeeException e) {
 
@@ -48,7 +48,6 @@ public class CustomErrorAdvice {
 		return new ResponseEntity<>(resultVo, resHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
-	@ResponseBody
 	@ExceptionHandler(HttpRequestException.class)
 	public ResponseEntity<ResultVo> httpRequestException(HttpRequestException e) {
 
@@ -66,21 +65,24 @@ public class CustomErrorAdvice {
 	 * @param e
 	 * @return
 	 */
-	@ResponseBody
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<?> badRequestException(BadRequestException e) {
 		log.error(e.getMessage());
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
+
+	@ExceptionHandler(value = {MethodArgumentNotValidException.class})
+	public ResponseEntity<?> methodArgumentNotValidExceptionException(MethodArgumentNotValidException e) {
+		log.error(e.getMessage());
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
 	
-	@ResponseBody
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<?> accessDeniedException(AccessDeniedException e) {
 		log.error(e.getMessage());
 		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 	}
 	
-	@ResponseBody
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<?> runtimeException(RuntimeException e, HttpServletRequest request, HttpServletResponse response) {
 
