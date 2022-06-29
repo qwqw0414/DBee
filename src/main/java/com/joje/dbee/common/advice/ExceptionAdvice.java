@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -112,7 +113,19 @@ public class ExceptionAdvice {
 
 		return new ResponseEntity<>(resultVo, HttpStatus.FORBIDDEN);
 	}
-
+	
+	/**
+	 * 잘 못 된 메소드
+	 */
+	@ExceptionHandler(value = { HttpRequestMethodNotSupportedException.class })
+	public ResponseEntity<ResultVo> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+		log.error(e.getMessage());
+		
+		ResultVo resultVo = new ResultVo(StatusCode.BAD_REQUEST);
+		
+		return new ResponseEntity<>(resultVo, HttpStatus.METHOD_NOT_ALLOWED);
+	}
+	
 	/**
 	 * 그 외 서버 에러
 	 */
@@ -123,6 +136,16 @@ public class ExceptionAdvice {
 
 		ResultVo resultVo = new ResultVo(StatusCode.INTERNAL_SERVER_ERROR);
 
+		return new ResponseEntity<>(resultVo, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(value = { Exception.class })
+	public ResponseEntity<ResultVo> exception(Exception e) {
+		log.error(e.getMessage());
+		e.printStackTrace();
+		
+		ResultVo resultVo = new ResultVo(StatusCode.INTERNAL_SERVER_ERROR);
+		
 		return new ResponseEntity<>(resultVo, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 

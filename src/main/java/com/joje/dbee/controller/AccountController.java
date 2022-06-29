@@ -33,7 +33,6 @@ public class AccountController {
 
 	private final AccountService accountService;
 	private final AuthService authService;
-	private final JwtTokenProvider jwtTokenProvider;
 	
 	/**
 	 * 로그인

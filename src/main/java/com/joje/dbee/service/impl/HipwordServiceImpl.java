@@ -10,12 +10,14 @@ import java.util.regex.Pattern;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.joje.dbee.common.component.HttpRequestComponent;
 import com.joje.dbee.common.utils.StringUtil;
-import com.joje.dbee.component.HttpRequestComponent;
+import com.joje.dbee.dto.hipword.SongDto;
 import com.joje.dbee.entity.hipword.ArtistEntity;
 import com.joje.dbee.entity.hipword.SongEntity;
 import com.joje.dbee.repository.hipword.ArtistRepository;
@@ -24,6 +26,7 @@ import com.joje.dbee.repository.hipword.SongRepository;
 import com.joje.dbee.entity.hipword.RankEntity;
 import com.joje.dbee.service.HipwordService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 public class HipwordServiceImpl implements HipwordService {
 
 	private final Map<String, String> URL_MAP = new HashMap<>();
-	private Gson gson = new Gson();
 	
 	public HipwordServiceImpl() {
 //		URL 정보 세팅
@@ -51,6 +53,9 @@ public class HipwordServiceImpl implements HipwordService {
 	
 	@Autowired
 	private RankRepository rankRepository;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 	
 //	아이디 매칭 패턴
 	private static Pattern regexp = Pattern.compile("\\d+");
@@ -143,7 +148,7 @@ public class HipwordServiceImpl implements HipwordService {
 	}
 	
 	@Override
-	public SongEntity addSong(String songId) {
+	public SongDto getSongById(String songId) {
 		
 		SongEntity songEntity = null;
 		
@@ -163,17 +168,17 @@ public class HipwordServiceImpl implements HipwordService {
 			
 //			저장 정보 셋
 			SongEntity song = new SongEntity();
-			song.setSongId(songId);;
+			song.setSongId(songId);
 			song.setSongTitle(this.getSongTitleByMelon(doc));
 			song.setArtist(artist);
 			song.setLyrics(StringUtil.join(this.getLyricsToMelon(doc), "\n"));
 			
 			songEntity = songRepository.save(song);
 		} else {
-			songEntity = songRepository.findBySongId(songId);
+			songEntity = songRepository.findBySongId(songId).get();
 		}
 		
-		return songEntity;
+		return modelMapper.map(songEntity, SongDto.class);
 	}
 	
 
@@ -184,7 +189,7 @@ public class HipwordServiceImpl implements HipwordService {
 			log.debug("[rank]=[{}]", rank);
 			String songId = rank.getSong().getSongId();
 			
-			SongEntity songEntity = songRepository.findBySongId(songId);
+			SongEntity songEntity = songRepository.findBySongId(songId).get();
 			rank.setSong(songEntity);
 		}
 		

@@ -1,4 +1,4 @@
-package com.joje.dbee.component;
+package com.joje.dbee.common.component;
 
 import java.io.IOException;
 

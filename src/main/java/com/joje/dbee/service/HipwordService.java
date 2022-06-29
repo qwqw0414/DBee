@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jsoup.nodes.Document;
 
+import com.joje.dbee.dto.hipword.SongDto;
 import com.joje.dbee.entity.hipword.ArtistEntity;
 import com.joje.dbee.entity.hipword.SongEntity;
 import com.joje.dbee.entity.hipword.RankEntity;
@@ -20,7 +21,7 @@ public interface HipwordService {
 
 	ArtistEntity getArtistByMelon(Document doc);
 
-	SongEntity addSong(String songId);
+	SongDto getSongById(String songId);
 
 	int addRank(List<RankEntity> ranks);
 }

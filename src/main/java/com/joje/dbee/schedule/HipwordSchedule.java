@@ -30,7 +30,7 @@ public class HipwordSchedule {
 
 		if (ranks != null && ranks.size() > 0)
 			for (RankEntity vo : ranks)
-				hipwordService.addSong(vo.getSong().getSongId());
+				hipwordService.getSongById(vo.getSong().getSongId());
 		
 		hipwordService.addRank(ranks);
 

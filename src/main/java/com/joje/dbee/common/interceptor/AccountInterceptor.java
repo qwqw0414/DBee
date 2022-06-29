@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.google.gson.Gson;
+import com.joje.dbee.common.component.JsonConfigComponent;
 import com.joje.dbee.common.utils.HttpUtil;
 import com.joje.dbee.common.utils.ReadableRequestWrapper;
-import com.joje.dbee.component.JsonConfigComponent;
 import com.joje.dbee.exception.BadRequestException;
 
 import lombok.extern.slf4j.Slf4j;

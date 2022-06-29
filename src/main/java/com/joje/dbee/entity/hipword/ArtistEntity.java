@@ -1,7 +1,5 @@
 package com.joje.dbee.entity.hipword;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,10 +9,8 @@ import lombok.Data;
 
 @Data
 @Entity(name = "TB_HIPWORD_ARTIST")
-public class ArtistEntity implements Serializable {
-
-	private static final long serialVersionUID = 8856968316411794453L;
-
+public class ArtistEntity {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long artistNo;
