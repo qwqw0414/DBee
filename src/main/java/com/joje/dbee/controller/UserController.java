@@ -17,6 +17,10 @@ import com.joje.dbee.vo.ResultVo;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 사용자 서비스 관련 컨트롤러
+ *
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/dbee/user")

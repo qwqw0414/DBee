@@ -9,5 +9,4 @@ public class DateUtil {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
 		return LocalDate.parse(str, formatter);
 	}
-	
 }

@@ -11,6 +11,10 @@ import com.joje.dbee.vo.ResultVo;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 연결 확인 컨트롤러
+ *
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/dbee")

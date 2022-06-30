@@ -1,5 +1,6 @@
 package com.joje.dbee.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import com.google.gson.Gson;
 import com.joje.dbee.common.contents.StatusCode;
 import com.joje.dbee.common.utils.ParamUtil;
 import com.joje.dbee.common.utils.StringUtil;
+import com.joje.dbee.dto.hipword.RankDto;
 import com.joje.dbee.dto.hipword.SongDto;
 import com.joje.dbee.entity.hipword.RankEntity;
 import com.joje.dbee.exception.DBeeException;
@@ -24,6 +26,11 @@ import com.joje.dbee.vo.ResultVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Lyrics 크롤링 컨트롤러
+ * @author kpcnc
+ *
+ */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -35,17 +42,20 @@ public class HipwordController {
 
 	@GetMapping(value = "/test", produces = "application/json; charset=utf8")
 	public ResponseEntity<?> test() throws Exception {
+		LocalDate recentDate = hipwordService.getRecentRankDate();
+		if(recentDate != LocalDate.now()) {
+			List<RankDto> ranks = hipwordService.getChartListToMelon();
 
-		List<RankEntity> ranks = hipwordService.getChartListToMelon();
-
-		if (ranks != null && ranks.size() > 0)
-			for (RankEntity vo : ranks)
-				hipwordService.getSongById(vo.getSong().getSongId());
-		
-		hipwordService.addRank(ranks);
-		
+			if (ranks != null && ranks.size() > 0)
+				for (RankDto rank : ranks)
+					hipwordService.getSongById(rank.getSong().getSongId());
+			
+			hipwordService.addRank(ranks);
+		}
 //		결과 셋
 		ResultVo resultVo = new ResultVo();
+		resultVo.put("date", recentDate);
+		
 		return new ResponseEntity<>(gson.toJson(resultVo), HttpStatus.OK);
 	}
 
@@ -64,6 +74,7 @@ public class HipwordController {
 			
 			if (!StringUtil.isBlank(songId)) {
 				songDto = hipwordService.getSongById(songId);
+				log.debug("[songDto]=[{}]", songDto);
 			} else {
 				throw new DBeeException(StatusCode.FAILED_NO_DATA, "검색 결과가 없습니다.");
 			}

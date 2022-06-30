@@ -24,9 +24,12 @@ import com.joje.dbee.vo.ResultVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 로그인, 회원가입 관련 컨트롤러
+ *
+ */
 @Slf4j
 @RestController
-//@Validated
 @RequiredArgsConstructor
 @RequestMapping(value = "/dbee/account")
 public class AccountController {

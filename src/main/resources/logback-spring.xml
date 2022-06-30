@@ -98,7 +98,7 @@
 	<logger name="jdbc.connection" level="OFF" /> 
 	
 	<!-- SQL문만을 로그로 남기며, PreparedStatement일 경우 관련된 argument 값으로 대체된 SQL문이 보여진다. -->
-	<logger name="jdbc.sqlonly" level="DEBUG" /> 
+	<logger name="jdbc.sqlonly" level="OFF" /> 
 	
 	<!-- SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds)를 포함한다. -->
 	<logger name="jdbc.sqltiming" level="OFF" /> 
@@ -110,6 +110,6 @@
 	<logger name="jdbc.resultset" level="OFF" /> 
 	
 	<!-- SQL 결과 조회된 데이터의 table을 로그로 남긴다. -->
-	<logger name="jdbc.resultsettable" level="DEBUG" />
+	<logger name="jdbc.resultsettable" level="OFF" />
 	
 </configuration>

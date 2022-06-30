@@ -31,11 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class ExceptionAdvice {
 
-	private static HttpHeaders header;
+	private final HttpHeaders HTTP_HEADER;
 
 	public ExceptionAdvice() {
-		header = new HttpHeaders();
-		header.add("Content-Type", "application/json;charset=UTF-8");
+		this.HTTP_HEADER = new HttpHeaders();
+		this.HTTP_HEADER.add("Content-Type", "application/json;charset=UTF-8");
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class ExceptionAdvice {
 		ResultVo resultVo = new ResultVo(statusCode);
 		resultVo.put("message", statusCode.getMessage());
 
-		return new ResponseEntity<>(resultVo, header, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(resultVo, HTTP_HEADER, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class ExceptionAdvice {
 		ResultVo resultVo = new ResultVo(StatusCode.FAILED_CONNECT);
 		resultVo.put("message", StatusCode.FAILED_CONNECT.getMessage());
 
-		return new ResponseEntity<>(resultVo, header, HttpStatus.OK);
+		return new ResponseEntity<>(resultVo, HTTP_HEADER, HttpStatus.OK);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class ExceptionAdvice {
 		ResultVo resultVo = new ResultVo(StatusCode.BAD_REQUEST);
 		resultVo.put("message", e.getMessage());
 
-		return new ResponseEntity<>(resultVo, header, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(resultVo, HTTP_HEADER, HttpStatus.BAD_REQUEST);
 	}
 	
 	/**
@@ -87,7 +87,7 @@ public class ExceptionAdvice {
 
 		ResultVo resultVo = new ResultVo(StatusCode.BAD_REQUEST);
 
-		return new ResponseEntity<>(resultVo, header, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(resultVo, HTTP_HEADER, HttpStatus.BAD_REQUEST);
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public class ExceptionAdvice {
 
 		ResultVo resultVo = new ResultVo(StatusCode.UNAUTHORIZED);
 
-		return new ResponseEntity<>(resultVo, HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(resultVo, HTTP_HEADER, HttpStatus.UNAUTHORIZED);
 	}
 	
 	/**
@@ -111,11 +111,11 @@ public class ExceptionAdvice {
 
 		ResultVo resultVo = new ResultVo(StatusCode.FORBIDDEN);
 
-		return new ResponseEntity<>(resultVo, HttpStatus.FORBIDDEN);
+		return new ResponseEntity<>(resultVo, HTTP_HEADER, HttpStatus.FORBIDDEN);
 	}
 	
 	/**
-	 * 잘 못 된 메소드
+	 * 잘못 된 메소드
 	 */
 	@ExceptionHandler(value = { HttpRequestMethodNotSupportedException.class })
 	public ResponseEntity<ResultVo> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
@@ -123,7 +123,7 @@ public class ExceptionAdvice {
 		
 		ResultVo resultVo = new ResultVo(StatusCode.BAD_REQUEST);
 		
-		return new ResponseEntity<>(resultVo, HttpStatus.METHOD_NOT_ALLOWED);
+		return new ResponseEntity<>(resultVo, HTTP_HEADER, HttpStatus.METHOD_NOT_ALLOWED);
 	}
 	
 	/**
@@ -136,7 +136,7 @@ public class ExceptionAdvice {
 
 		ResultVo resultVo = new ResultVo(StatusCode.INTERNAL_SERVER_ERROR);
 
-		return new ResponseEntity<>(resultVo, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(resultVo, HTTP_HEADER, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@ExceptionHandler(value = { Exception.class })
@@ -146,7 +146,7 @@ public class ExceptionAdvice {
 		
 		ResultVo resultVo = new ResultVo(StatusCode.INTERNAL_SERVER_ERROR);
 		
-		return new ResponseEntity<>(resultVo, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(resultVo, HTTP_HEADER, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }

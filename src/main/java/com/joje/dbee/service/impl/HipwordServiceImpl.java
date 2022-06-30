@@ -1,5 +1,6 @@
 package com.joje.dbee.service.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 import com.joje.dbee.common.component.HttpRequestComponent;
 import com.joje.dbee.common.utils.StringUtil;
+import com.joje.dbee.dto.hipword.RankDto;
 import com.joje.dbee.dto.hipword.SongDto;
 import com.joje.dbee.entity.hipword.ArtistEntity;
 import com.joje.dbee.entity.hipword.SongEntity;
@@ -60,9 +62,12 @@ public class HipwordServiceImpl implements HipwordService {
 //	아이디 매칭 패턴
 	private static Pattern regexp = Pattern.compile("\\d+");
 	
+	/**
+	 * 멜론 차트 TOP 100 데이터 크롤링
+	 */
 	@Override
-	public List<RankEntity> getChartListToMelon() {
-		List<RankEntity> ranks = new ArrayList<>();
+	public List<RankDto> getChartListToMelon() {
+		List<RankDto> ranks = new ArrayList<>();
 		Document doc = httpRequestComponent.requestHtml(URL_MAP.get("melon.chart"));
 		
 		Elements elmts = doc.select("tbody tr");
@@ -71,33 +76,70 @@ public class HipwordServiceImpl implements HipwordService {
 			String id = elmt.attr("data-song-no");
 			int rank = Integer.parseInt(elmt.selectFirst("span.rank").text());
 
-			SongEntity songEntity = new SongEntity();
-			songEntity.setSongId(id);
+			SongDto songDto = new SongDto();
+			songDto.setSongId(id);
 
-			RankEntity rankEntity = new RankEntity();
-			rankEntity.setSongRank(rank);
-			rankEntity.setSong(songEntity);
+			RankDto rankDto = new RankDto();
+			rankDto.setSongRank(rank);
+			rankDto.setSong(songDto);
 			
-			ranks.add(rankEntity);
+			ranks.add(rankDto);
 		}
 		return ranks;
 	}
-
+	
+	/**
+	 * 멜론 곡 아이디를 이용해 해당 곡 정보 크롤링
+	 */
 	@Override
-	public List<String> getLyricsToMelon(Document doc) {
-		String FILTER_STR = "<!-- height:auto; 로 변경시, 확장됨 -->";
-		List<String> lyrics = new ArrayList<>();
-		Element elmt = doc.selectFirst("div.lyric");
-		if (elmt != null) {
-			String html = elmt.html().replace(FILTER_STR, "");
-			String[] line = html.split("<br>");
-			for (String l : line) {
-				lyrics.add(l.trim());
+	public SongDto getSongById(String songId) {
+		
+		SongEntity songEntity = songRepository.findBySongId(songId);
+		
+		if(songEntity == null) {
+			
+			Document doc = httpRequestComponent.requestHtml(URL_MAP.get("melon.song") + songId);
+			
+			ArtistEntity artistEntity = this.getArtistByMelon(doc);
+			if(artistRepository.countByArtistId(artistEntity.getArtistId()) < 1) {
+				artistRepository.save(artistEntity);
 			}
+			
+			songEntity = new SongEntity();
+			songEntity.setSongId(songId);
+			songEntity.setSongTitle(this.getSongTitleByMelon(doc));
+			songEntity.setLyrics(StringUtil.join(this.getLyricsToMelon(doc), "\n"));
+			songEntity.setArtist(artistEntity);
+			songEntity = songRepository.save(songEntity);
 		}
-		return lyrics;
+		
+		return modelMapper.map(songEntity, SongDto.class);
 	}
 
+	/**
+	 * 곡 랭크 데이터 추가
+	 */
+	@Override
+	public int addRank(List<RankDto> ranks) {
+		List<RankEntity> saveRanks = new ArrayList<>();
+		
+		for(RankDto rank : ranks) {
+			String songId = rank.getSong().getSongId();
+			
+			SongEntity songEntity = songRepository.findBySongId(songId);
+			RankEntity rankEntity = modelMapper.map(rank, RankEntity.class);
+			rankEntity.setRegDate(LocalDate.now());
+			rankEntity.setSong(songEntity);
+			saveRanks.add(rankEntity);
+		}
+		
+		saveRanks = rankRepository.saveAll(saveRanks);
+		return saveRanks.size();
+	}
+
+	/**
+	 * 멜론에 해당 키워드로 검색 후 가장 일치하는 곡 아이디 리턴
+	 */
 	@Override
 	public String getSongIdToMelon(String keyword) {
 		String searchUrl = URL_MAP.get("melon.search") + keyword;
@@ -118,8 +160,33 @@ public class HipwordServiceImpl implements HipwordService {
 		return songId;
 	}
 
+	/**
+	 * 가장 최근 등록일 조회
+	 */
 	@Override
-	public String getSongTitleByMelon(Document doc) {
+	public LocalDate getRecentRankDate() {
+		LocalDate resultDate = rankRepository.findTopOrderByRegDate();
+		if(resultDate == null) {
+			resultDate = LocalDate.MIN;
+		}
+		return resultDate;
+	}
+	
+	public List<String> getLyricsToMelon(Document doc) {
+		String FILTER_STR = "<!-- height:auto; 로 변경시, 확장됨 -->";
+		List<String> lyrics = new ArrayList<>();
+		Element elmt = doc.selectFirst("div.lyric");
+		if (elmt != null) {
+			String html = elmt.html().replace(FILTER_STR, "");
+			String[] line = html.split("<br>");
+			for (String l : line) {
+				lyrics.add(l.trim());
+			}
+		}
+		return lyrics;
+	}
+	
+	private String getSongTitleByMelon(Document doc) {
 		Element elmt = doc.selectFirst("div.song_name");
 		String songTitle = "";
 		if (elmt != null) {
@@ -128,8 +195,7 @@ public class HipwordServiceImpl implements HipwordService {
 		return songTitle;
 	}
 
-	@Override
-	public ArtistEntity getArtistByMelon(Document doc) {
+	private ArtistEntity getArtistByMelon(Document doc) {
 		ArtistEntity artist = new ArtistEntity();
 		Element elmt = doc.selectFirst("div.artist");
 		
@@ -142,59 +208,7 @@ public class HipwordServiceImpl implements HipwordService {
 		if(matcher.find()) {
 			artist.setArtistId(matcher.group());
 		}
-		
-		log.debug("[artist]=[{}]", artist);
 		return artist;
 	}
 	
-	@Override
-	public SongDto getSongById(String songId) {
-		
-		SongEntity songEntity = null;
-		
-//		DB에 해당 곡 정보가 있는지 여부 판단
-		if(songRepository.countBySongId(songId) < 1) {
-//			없다면 크롤링
-			Document doc = httpRequestComponent.requestHtml(URL_MAP.get("melon.song") + songId);
-			ArtistEntity avo = this.getArtistByMelon(doc);
-			ArtistEntity artist = new ArtistEntity();
-			if (artistRepository.countByArtistId(avo.getArtistId()) < 1) {
-				artist.setArtistId(avo.getArtistId());
-				artist.setArtistName(avo.getArtistName());
-				artist = artistRepository.save(artist);
-			} else {
-				artist = artistRepository.findByArtistId(avo.getArtistId());
-			}
-			
-//			저장 정보 셋
-			SongEntity song = new SongEntity();
-			song.setSongId(songId);
-			song.setSongTitle(this.getSongTitleByMelon(doc));
-			song.setArtist(artist);
-			song.setLyrics(StringUtil.join(this.getLyricsToMelon(doc), "\n"));
-			
-			songEntity = songRepository.save(song);
-		} else {
-			songEntity = songRepository.findBySongId(songId).get();
-		}
-		
-		return modelMapper.map(songEntity, SongDto.class);
-	}
-	
-
-	@Override
-	public int addRank(List<RankEntity> ranks) {
-		for(RankEntity rank : ranks) {
-			
-			log.debug("[rank]=[{}]", rank);
-			String songId = rank.getSong().getSongId();
-			
-			SongEntity songEntity = songRepository.findBySongId(songId).get();
-			rank.setSong(songEntity);
-		}
-		
-		rankRepository.saveAll(ranks);
-		return 0;
-	}
-
 }
