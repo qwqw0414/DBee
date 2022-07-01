@@ -1,6 +1,7 @@
 package com.joje.dbee.controller;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import com.joje.dbee.dto.hipword.SongDto;
 import com.joje.dbee.entity.hipword.RankEntity;
 import com.joje.dbee.exception.DBeeException;
 import com.joje.dbee.service.HipwordService;
+import com.joje.dbee.service.NluService;
 import com.joje.dbee.vo.ResultVo;
 
 import lombok.RequiredArgsConstructor;
@@ -37,24 +39,27 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/dbee/hipword")
 public class HipwordController {
 
+	private final NluService nluService;
 	private final HipwordService hipwordService;
 	private final Gson gson;
 
 	@GetMapping(value = "/test", produces = "application/json; charset=utf8")
 	public ResponseEntity<?> test() throws Exception {
-		LocalDate recentDate = hipwordService.getRecentRankDate();
-		if(recentDate != LocalDate.now()) {
-			List<RankDto> ranks = hipwordService.getChartListToMelon();
-
-			if (ranks != null && ranks.size() > 0)
-				for (RankDto rank : ranks)
-					hipwordService.getSongById(rank.getSong().getSongId());
-			
-			hipwordService.addRank(ranks);
+		
+		List<String> nnList =  nluService.analyzeAllByNN(hipwordService.getLyricsList());
+		Map<String, Integer> nnMap = new HashMap<>();
+		
+		for(String nn : nnList) {
+			if(nnMap.containsKey(nn)) {
+				nnMap.put(nn, nnMap.get(nn) + 1);
+			} else {
+				nnMap.put(nn, 1);
+			}
 		}
+		
 //		결과 셋
 		ResultVo resultVo = new ResultVo();
-		resultVo.put("date", recentDate);
+		resultVo.put("nns", nnMap);
 		
 		return new ResponseEntity<>(gson.toJson(resultVo), HttpStatus.OK);
 	}

@@ -93,18 +93,20 @@ public class HipwordServiceImpl implements HipwordService {
 	 */
 	@Override
 	public SongDto getSongById(String songId) {
-		
+
 		SongEntity songEntity = songRepository.findBySongId(songId);
-		
-		if(songEntity == null) {
-			
+
+		if (songEntity == null) {
+
 			Document doc = httpRequestComponent.requestHtml(URL_MAP.get("melon.song") + songId);
-			
+
 			ArtistEntity artistEntity = this.getArtistByMelon(doc);
-			if(artistRepository.countByArtistId(artistEntity.getArtistId()) < 1) {
-				artistRepository.save(artistEntity);
+			if (artistRepository.countByArtistId(artistEntity.getArtistId()) < 1) {
+				artistEntity = artistRepository.save(artistEntity);
+			} else {
+				artistEntity = artistRepository.findByArtistId(artistEntity.getArtistId());
 			}
-			
+
 			songEntity = new SongEntity();
 			songEntity.setSongId(songId);
 			songEntity.setSongTitle(this.getSongTitleByMelon(doc));
@@ -112,7 +114,7 @@ public class HipwordServiceImpl implements HipwordService {
 			songEntity.setArtist(artistEntity);
 			songEntity = songRepository.save(songEntity);
 		}
-		
+
 		return modelMapper.map(songEntity, SongDto.class);
 	}
 
@@ -209,6 +211,19 @@ public class HipwordServiceImpl implements HipwordService {
 			artist.setArtistId(matcher.group());
 		}
 		return artist;
+	}
+
+	@Override
+	public List<String> getLyricsList() {
+		List<String> lyricsList = new ArrayList<>();
+		
+		List<SongEntity> songs = songRepository.findAll();
+		
+		for(SongEntity song : songs) {
+			lyricsList.add(song.getLyrics());
+		}
+		
+		return lyricsList;
 	}
 	
 }

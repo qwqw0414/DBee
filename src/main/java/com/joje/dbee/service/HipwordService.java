@@ -22,4 +22,6 @@ public interface HipwordService {
 	String getSongIdToMelon(String keyword);
 
 	LocalDate getRecentRankDate();
+
+	List<String> getLyricsList();
 }
