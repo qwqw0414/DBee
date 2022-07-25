@@ -6,7 +6,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.joje.dbee.exception.BadRequestException;
 
-public class ParamUtil {
+public class ParamUtils {
 
 //	#############################################################################################
 //									          String

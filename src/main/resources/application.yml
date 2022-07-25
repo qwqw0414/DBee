@@ -11,6 +11,10 @@ spring:
   profiles:
     active: local
     
+# yml 추가
+  config:
+    import: classpath:/dbee-config.yml
+    
 # Devtools
   devtools:
     livereload:

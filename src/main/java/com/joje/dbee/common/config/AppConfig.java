@@ -1,4 +1,4 @@
-package com.joje.dbee.common.component;
+package com.joje.dbee.common.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +11,7 @@ import com.google.gson.Gson;
  *
  */
 @Component
-public class CommonComponent {
+public class AppConfig {
 
 	@Bean
 	public Gson gson() {

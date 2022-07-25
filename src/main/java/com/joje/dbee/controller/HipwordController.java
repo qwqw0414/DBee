@@ -1,6 +1,5 @@
 package com.joje.dbee.controller;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,11 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.joje.dbee.common.contents.StatusCode;
-import com.joje.dbee.common.utils.ParamUtil;
+import com.joje.dbee.common.utils.ParamUtils;
 import com.joje.dbee.common.utils.StringUtil;
-import com.joje.dbee.dto.hipword.RankDto;
 import com.joje.dbee.dto.hipword.SongDto;
-import com.joje.dbee.entity.hipword.RankEntity;
 import com.joje.dbee.exception.DBeeException;
 import com.joje.dbee.service.HipwordService;
 import com.joje.dbee.service.NluService;
@@ -66,10 +63,10 @@ public class HipwordController {
 
 	@GetMapping(value = "/{type}", produces = "application/json; charset=utf8")
 	public ResponseEntity<ResultVo> searchSongByKeword(@PathVariable(value = "type") String type,
-												@RequestBody Map<String, Object> body) throws Exception {
+													   @RequestBody Map<String, Object> body) throws Exception {
 		
 //		검색 키워드
-		String keyword = ParamUtil.toStr(body, "keyword");
+		String keyword = ParamUtils.toStr(body, "keyword");
 		SongDto songDto = null;
 		
 		if("melon".equals(type)) {

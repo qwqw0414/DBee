@@ -22,9 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JwtFilter implements Filter{
-
-	
+public class JwtTokenFilter implements Filter{
 
 	private final JwtTokenProvider tokenProvider;	
 	

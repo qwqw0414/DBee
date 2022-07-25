@@ -13,6 +13,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -34,14 +35,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service(value = "HipwordService")
 public class HipwordServiceImpl implements HipwordService {
-
-	private final Map<String, String> URL_MAP = new HashMap<>();
+	private final String URL_MELON_CHART;
+	private final String URL_MELON_SEARCH;
+	private final String URL_MELON_DETAIL;
 	
-	public HipwordServiceImpl() {
-//		URL 정보 세팅
-		URL_MAP.put("melon.chart", "https://www.melon.com/chart/index.htm");
-		URL_MAP.put("melon.search", "https://www.melon.com/search/total/index.htm?q=");
-		URL_MAP.put("melon.song", "https://www.melon.com/song/detail.htm?songId=");
+	public HipwordServiceImpl(@Value("${dbee.hipword.url.melon.chart}") String chart,
+							  @Value("${dbee.hipword.url.melon.search}") String search,
+							  @Value("${dbee.hipword.url.melon.detail}") String detail) {
+		
+		this.URL_MELON_CHART = chart;
+		this.URL_MELON_SEARCH = search;
+		this.URL_MELON_DETAIL = detail;
 	}
 
 	@Autowired
@@ -68,7 +72,7 @@ public class HipwordServiceImpl implements HipwordService {
 	@Override
 	public List<RankDto> getChartListToMelon() {
 		List<RankDto> ranks = new ArrayList<>();
-		Document doc = httpRequestComponent.requestHtml(URL_MAP.get("melon.chart"));
+		Document doc = httpRequestComponent.requestHtml(URL_MELON_CHART);
 		
 		Elements elmts = doc.select("tbody tr");
 
@@ -98,7 +102,7 @@ public class HipwordServiceImpl implements HipwordService {
 
 		if (songEntity == null) {
 
-			Document doc = httpRequestComponent.requestHtml(URL_MAP.get("melon.song") + songId);
+			Document doc = httpRequestComponent.requestHtml(URL_MELON_DETAIL + songId);
 
 			ArtistEntity artistEntity = this.getArtistByMelon(doc);
 			if (artistRepository.countByArtistId(artistEntity.getArtistId()) < 1) {
@@ -144,7 +148,7 @@ public class HipwordServiceImpl implements HipwordService {
 	 */
 	@Override
 	public String getSongIdToMelon(String keyword) {
-		String searchUrl = URL_MAP.get("melon.search") + keyword;
+		String searchUrl = URL_MELON_SEARCH + keyword;
 		Document doc = httpRequestComponent.requestHtml(searchUrl);
 		
 		Elements tables = doc.select("#frm_songList table");

@@ -6,7 +6,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
-import com.joje.dbee.common.filter.JwtFilter;
+import com.joje.dbee.common.filter.JwtTokenFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>{
 
-	private final JwtFilter jwtFilter;
+	private final JwtTokenFilter jwtFilter;
 	
     @Override
     public void configure(HttpSecurity http) {

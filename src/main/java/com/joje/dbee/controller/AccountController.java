@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.joje.dbee.common.filter.JwtFilter;
+import com.joje.dbee.common.filter.JwtTokenFilter;
 import com.joje.dbee.common.security.JwtTokenProvider;
 import com.joje.dbee.dto.account.TokenResponseDto;
 import com.joje.dbee.dto.account.UserDto;

@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Order(value = 2)
 @WebFilter(urlPatterns = "/dbee/*")
-public class ContentTypeFilter implements Filter{
+public class CommonFilter implements Filter{
 	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

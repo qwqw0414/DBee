@@ -33,6 +33,7 @@ public class UserController {
 	public ResponseEntity<ResultVo> myinfo(HttpServletRequest request) throws Exception {
 		
 		UserDto user = accountService.findByUserNo(jwtTokenProvider.getUserNo(request));
+		
 		if(user == null)
 			throw new DBeeException(StatusCode.FAILED_NO_DATA, "유저 정보가 없습니다.");
 		

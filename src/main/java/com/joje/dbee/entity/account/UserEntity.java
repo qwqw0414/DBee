@@ -31,7 +31,7 @@ public class UserEntity {
 	private String userId;
 	private String userName;
 	private String password;
-	private LocalDateTime regDate = LocalDateTime.now();
+	private LocalDateTime regDate;
 	private boolean enabled;
 	
 	@JsonIgnore

@@ -19,7 +19,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	private static final String[] EXCLUDE_PATHS = { "/assets/**", "/error", "/favicon.ico"};
 	
 	/**
-	 * 인터셉터 핸들링
+	 * 인터셉터 핸들러
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
@@ -43,7 +43,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		return resolver;
 	}
 
-//  resources 배치 파일 viewResolve 제외
+//  리소스 핸들러
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");

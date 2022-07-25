@@ -1,4 +1,4 @@
-package com.joje.dbee.common.advice;
+package com.joje.dbee.controller;
 
 import java.nio.file.AccessDeniedException;
 
